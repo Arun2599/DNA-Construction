@@ -1,0 +1,130 @@
+<!-- Top Nav -->
+<app-topnav></app-topnav>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>Construction solution</h1>
+        <p>Experience excellence in construction services, delivering superior quality and innovative solutions for your projects</p>
+        <button class="view-more-btn">View More</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Building Dreams Section -->
+  <section class="about-section">
+    <div class="content-wrapper">
+      <div class="about-text">
+        <h2>Building Dreams,<br>Shaping Futures</h2>
+        <p>With years of excellence in construction, we deliver innovative solutions and unmatched quality in every project. Our commitment to excellence drives us forward.</p>
+        <div class="stats">
+          <div class="stat-item">
+            <h3>100%</h3>
+            <p>Client Satisfaction</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-image">
+        <img src="assets/images/about-image.jpg" alt="About Us">
+      </div>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section class="services-section">
+    <h2>Crafting Spaces,<br>Elevating Experiences</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <img src="assets/images/service1.png" alt="Construction Excellence">
+        </div>
+        <h3>Construction Excellence</h3>
+        <p>Delivering exceptional construction services with precision and expertise.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <img src="assets/images/service2.png" alt="Design Innovation">
+        </div>
+        <h3>Design Innovation</h3>
+        <p>Creating unique and functional designs that stand out.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <img src="assets/images/service3.png" alt="Project Management">
+        </div>
+        <h3>Project Management</h3>
+        <p>Efficient management ensuring timely project completion.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Projects -->
+  <section class="projects-section">
+    <div class="section-header">
+      <h2>Featured Projects</h2>
+      <div class="header-actions">
+        <button class="nav-btn prev">Previous</button>
+        <button class="nav-btn next">Next</button>
+        <a href="#" class="view-all">View All</a>
+      </div>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card" *ngFor="let project of projects">
+        <img [src]="project.image" [alt]="project.title">
+        <div class="project-info">
+          <h3>{{project.title}}</h3>
+          <p>{{project.category}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <h2>Our Clients Says</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-content">
+          <p>{{testimonial.text}}</p>
+          <div class="client-info">
+            <h4>{{testimonial.name}}</h4>
+            <p>{{testimonial.position}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-nav">
+      <button class="nav-dot active"></button>
+      <button class="nav-dot"></button>
+      <button class="nav-dot"></button>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="contact-content">
+      <div class="contact-text">
+        <h2>You can contact us,<br>if you have any query</h2>
+      </div>
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <img src="assets/images/phone-icon.png" alt="Call Us">
+          </div>
+          <h3>Call Us</h3>
+          <p>+1 234 567 890</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">
+            <img src="assets/images/email-icon.png" alt="Email Us">
+          </div>
+          <h3>Email Us</h3>
+          <p>info&nbsp;construction.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+   <app-bottomnav></app-bottomnav>
+  

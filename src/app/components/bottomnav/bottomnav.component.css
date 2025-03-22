@@ -1,0 +1,143 @@
+.footer {
+  background-color: #0f1419;
+  color: white;
+  padding: 60px 20px 20px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr;
+  gap: 40px;
+}
+
+/* Brand Section */
+.footer-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.footer-logo {
+  width: 60px;
+  height: auto;
+}
+
+.brand-text h2 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.brand-text h3 {
+  font-size: 24px;
+  margin: 0;
+  color: #4cc9f0;
+}
+
+/* Quick Links Section */
+.footer-links h4 {
+  font-size: 18px;
+  margin: 0 0 20px;
+  color: white;
+}
+
+.footer-links nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.footer-links a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+/* Contact Section */
+.footer-contact h4 {
+  font-size: 18px;
+  margin: 0 0 20px;
+  color: white;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-details p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  color: #a0aec0;
+}
+
+.contact-details .icon {
+  font-size: 20px;
+  min-width: 24px;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  color: #a0aec0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 20px 20px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .footer-brand {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-links nav {
+    align-items: center;
+  }
+
+  .contact-details p {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-text h2,
+  .brand-text h3 {
+    font-size: 20px;
+  }
+
+  .footer-logo {
+    width: 50px;
+  }
+}

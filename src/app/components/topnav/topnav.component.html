@@ -1,0 +1,36 @@
+<nav class="navbar">
+  <div class="top-info">
+    <div class="contact-info">
+      <span>📍 Akshya apartment Guduvancheri, Chennai</span>
+      <span>📞 73056 93530</span>
+    </div>
+    <div class="social-links">
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+  <div class="main-nav">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/">
+          <img src="assets/images/logo.png" alt="DNA Constructions & Architects">
+          <div class="logo-text">
+            <h1>DNA Constructions & Architects</h1>
+            <p>Build your dream house</p>
+          </div>
+        </a>
+      </div>
+      <button class="mobile-menu-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links" [class.active]="isMenuOpen">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/what-we-offer" routerLinkActive="active">What we offer</a>
+        <a routerLink="/projects" routerLinkActive="active">Projects</a>
+        <a routerLink="/contact" routerLinkActive="active">Contact us</a>
+      </div>
+    </div>
+  </div>
+</nav>

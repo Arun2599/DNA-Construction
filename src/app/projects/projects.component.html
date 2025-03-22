@@ -1,0 +1,39 @@
+<!-- Top Nav -->
+<app-topnav></app-topnav>
+
+<!-- Projects Hero Section -->
+<section class="projects-hero">
+  <div class="hero-content">
+    <span class="subtitle">PROJECTS</span>
+    <h1>A SNIPPET OF <span class="highlight">PROJECTS</span></h1>
+  </div>
+</section>
+
+<!-- Projects Filter Section -->
+<section class="projects-section">
+  <div class="filter-tabs">
+    <button [class.active]="activeFilter === 'all'" (click)="filterProjects('all')">ALL WORKS</button>
+    <button [class.active]="activeFilter === 'construction'" (click)="filterProjects('construction')">CONSTRUCTION</button>
+    <button [class.active]="activeFilter === 'architecture'" (click)="filterProjects('architecture')">ARCHITECTURE</button>
+    <button [class.active]="activeFilter === 'building'" (click)="filterProjects('building')">BUILDING</button>
+    <button [class.active]="activeFilter === 'renovation'" (click)="filterProjects('renovation')">RENOVATION</button>
+    <button [class.active]="activeFilter === 'interior'" (click)="filterProjects('interior')">INTERIOR</button>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card" *ngFor="let project of filteredProjects">
+      <div class="project-image">
+        <img [src]="project.imageUrl" [alt]="project.title">
+        <div class="project-overlay">
+          <div class="project-info">
+            <h3>{{project.title}}</h3>
+            <p>{{project.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<app-bottomnav></app-bottomnav>
