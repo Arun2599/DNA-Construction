@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TopnavComponent } from '../components/topnav/topnav.component';
 import { BottomnavComponent } from '../components/bottomnav/bottomnav.component';
@@ -11,6 +11,31 @@ import { BottomnavComponent } from '../components/bottomnav/bottomnav.component'
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  @ViewChild('projectsContainer') projectsContainer!: ElementRef;
+  @ViewChild('testimonialsContainer') testimonialsContainer!: ElementRef;
+
+  scrollProjects(direction: 'left' | 'right'): void {
+    const container = this.projectsContainer.nativeElement;
+    const scrollAmount = 400; // Adjust this value to control scroll distance
+    
+    if (direction === 'left') {
+      container.scrollLeft -= scrollAmount;
+    } else {
+      container.scrollLeft += scrollAmount;
+    }
+  }
+
+  scrollTestimonials(direction: 'left' | 'right'): void {
+    const container = this.testimonialsContainer.nativeElement;
+    const scrollAmount = 450; // Adjust this value to control scroll distance
+    
+    if (direction === 'left') {
+      container.scrollLeft -= scrollAmount;
+    } else {
+      container.scrollLeft += scrollAmount;
+    }
+  }
+
   projects = [
     {
       image: 'assets/images/project1.jpg',

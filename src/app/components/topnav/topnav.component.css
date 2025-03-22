@@ -34,7 +34,7 @@
 }
 
 .main-nav {
-  background: white;
+  background: #000;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   padding: 10px 20px;
 }
@@ -69,13 +69,13 @@
   font-size: 20px;
   font-weight: 600;
   margin: 0;
-  color: #000;
+  color: #ffffff;
 }
 
 .logo-text p {
   font-size: 14px;
   margin: 0;
-  color: #666;
+  color: #f8f8f8;
 }
 
 .nav-links {
@@ -86,7 +86,7 @@
 
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: #9c9696;
   font-weight: 500;
   font-size: 16px;
   transition: color 0.3s;
@@ -94,7 +94,7 @@
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: #007bff;
+  color: #ffffff;
 }
 
 .mobile-menu-btn {

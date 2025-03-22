@@ -1,6 +1,6 @@
 /* Hero Section */
 .contact-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/contact-hero.jpg');
+  background-image: url('/assets/images/contact-us-hero.svg');
   background-size: cover;
   background-position: center;
   height: 400px;
@@ -48,7 +48,7 @@
 }
 
 .contact-image {
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
