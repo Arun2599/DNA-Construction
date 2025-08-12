@@ -13,10 +13,10 @@
     <div class="footer-links">
       <h4>Quick links</h4>
       <nav>
-        <a routerLink="/">Home</a>
-        <a routerLink="/projects">Projects</a>
-        <a routerLink="/what-we-offer">What we offer</a>
-        <a routerLink="/contact">Contact us</a>
+        <a routerLink="/" (click)="scrollTop()">Home</a>
+        <a routerLink="/projects" (click)="scrollTop()">Projects</a>
+        <a routerLink="/what-we-offer" (click)="scrollTop()">What we offer</a>
+        <a routerLink="/contact" (click)="scrollTop()">Contact us</a>
       </nav>
     </div>
 
@@ -25,12 +25,14 @@
       <h4>Contact with us</h4>
       <div class="contact-details">
         <p class="phone">
-          <span class="icon">📞</span>
-          +91 73056 93530
+          <a href="tel:+917305693530" aria-label="Call DNA Constructions">
+            <span class="icon">📞</span>
+            +91 73056 93530
+          </a>
         </p>
         <p class="email">
           <span class="icon">✉️</span>
-          dnaconstructionsandarchitecture&nbsp;gmail
+          dnaconstructionsandarchitecture&#64;gmail.com
         </p>
         <p class="address">
           <span class="icon">📍</span>

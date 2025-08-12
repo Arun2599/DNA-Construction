@@ -9,7 +9,6 @@
   justify-content: center;
   text-align: center;
   color: white;
-  margin-top: 90px;
 }
 
 .hero-content {
@@ -134,7 +133,6 @@
 @media (max-width: 768px) {
   .contact-hero {
     height: 300px;
-    margin-top: 60px;
   }
 
   .hero-content h1 {

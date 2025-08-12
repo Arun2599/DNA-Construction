@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global variables */
+:root {
+  --navbar-height: 100px; /* default desktop */
+}
+
+@media (max-width: 1024px) {
+  :root { --navbar-height: 105px; }
+}
+
+@media (max-width: 768px) {
+  :root { --navbar-height: 60px; }
+}
+
+/* Global reset and overflow control */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Ensure predictable sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent accidental horizontal scroll from wide content */
+body {
+  overflow-x: hidden;
+  /* Offset for fixed navbar (top-info + main-nav) */
+  padding-top: var(--navbar-height);
+}
+
+/* Media should not overflow their containers */
+img, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+

@@ -15,4 +15,27 @@ export class TopnavComponent {
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
+
+  instagram() {
+    window.open('https://www.instagram.com/_dna_constructions_architects_/', '_blank');
+  }
+
+  youtube() {
+    window.open('https://www.youtube.com/@dnaconstructionsarchitect3233', '_blank');
+  }
+
+  // Scroll to top on navigation to avoid partial offsets and ensure content starts at the viewport top
+  scrollTop() {
+    // Close mobile menu if open
+    if (this.isMenuOpen) {
+      this.isMenuOpen = false;
+    }
+    // Use smooth scroll where supported
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } catch {
+      // Fallback for older browsers
+      window.scrollTo(0, 0);
+    }
+  }
 }

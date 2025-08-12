@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TopnavComponent } from '../components/topnav/topnav.component';
 import { BottomnavComponent } from '../components/bottomnav/bottomnav.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -13,6 +13,9 @@ import { BottomnavComponent } from '../components/bottomnav/bottomnav.component'
 export class HomeComponent {
   @ViewChild('projectsContainer') projectsContainer!: ElementRef;
   @ViewChild('testimonialsContainer') testimonialsContainer!: ElementRef;
+  @ViewChild('aboutSection') aboutSection!: ElementRef<HTMLElement>;
+
+  constructor(private router: Router) {}
 
   scrollProjects(direction: 'left' | 'right'): void {
     const container = this.projectsContainer.nativeElement;
@@ -22,6 +25,16 @@ export class HomeComponent {
       container.scrollLeft -= scrollAmount;
     } else {
       container.scrollLeft += scrollAmount;
+    }
+  }
+
+  navigateToProjects(): void {
+    this.router.navigate(['/projects']);
+  }
+
+  scrollToAbout(): void {
+    if (this.aboutSection?.nativeElement) {
+      this.aboutSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 

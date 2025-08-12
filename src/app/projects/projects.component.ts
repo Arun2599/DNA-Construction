@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BottomnavComponent } from "../components/bottomnav/bottomnav.component";
 import { TopnavComponent } from "../components/topnav/topnav.component";
@@ -18,8 +18,11 @@ interface Project {
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent {
+export class ProjectsComponent implements AfterViewInit {
   activeFilter: string = 'all';
+  @ViewChild('filterScroll', { static: false }) filterScrollRef?: ElementRef<HTMLDivElement>;
+  showLeft: boolean = false;
+  showRight: boolean = false;
   
   projects: Project[] = [
     {
@@ -96,5 +99,39 @@ export class ProjectsComponent {
 
   filterProjects(category: string): void {
     this.activeFilter = category;
+  }
+
+  ngAfterViewInit(): void {
+    // Evaluate arrow visibility once view is ready
+    setTimeout(() => this.updateArrows(), 0);
+    // Attach scroll listener to update indicators
+    this.filterScrollRef?.nativeElement.addEventListener('scroll', this.updateArrows, { passive: true });
+    // Also on images/fonts load layout may change
+    window.addEventListener('load', this.updateArrows, { once: false });
+  }
+
+  @HostListener('window:resize') onResize() {
+    this.updateArrows();
+  }
+
+  // Use arrow function to preserve `this`
+  updateArrows = (): void => {
+    const el = this.filterScrollRef?.nativeElement;
+    if (!el) { return; }
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    this.showLeft = el.scrollLeft > 2;
+    this.showRight = el.scrollLeft < maxScroll - 2;
+  };
+
+  scrollLeftBy(): void {
+    const el = this.filterScrollRef?.nativeElement;
+    if (!el) { return; }
+    el.scrollBy({ left: -Math.max(150, el.clientWidth * 0.6), behavior: 'smooth' });
+  }
+
+  scrollRightBy(): void {
+    const el = this.filterScrollRef?.nativeElement;
+    if (!el) { return; }
+    el.scrollBy({ left: Math.max(150, el.clientWidth * 0.6), behavior: 'smooth' });
   }
 }

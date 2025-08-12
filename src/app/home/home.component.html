@@ -8,7 +8,7 @@
       <div class="hero-text">
         <h1>WE BUILD YOUR<br>DREAM HOUSE</h1>
         <p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator.</p>
-        <button class="start-exploring">Start Exploring <span class="arrow">→</span></button>
+        <button class="start-exploring" (click)="scrollToAbout()">Start Exploring <span class="arrow">→</span></button>
       </div>
       <div class="featured-card">
         <div class="featured-image">
@@ -17,7 +17,7 @@
         <div class="featured-content">
           <h3>20+ Projects Completed</h3>
           <p>In 3 years</p>
-          <button class="view-details">View Details</button>
+          <button (click)="navigateToProjects()" class="view-details">View Details</button>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
 </section>
 
 <!-- Building Dreams Section -->
-<section class="about-section">
+<section class="about-section" #aboutSection>
   <div class="content-wrapper">
     <div class="about-content">
       <div class="section-header">

@@ -1,6 +1,6 @@
 /* Hero Section */
 .services-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/services-hero.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/we-offer.jpg');
   background-size: cover;
   background-position: center;
   height: 400px;
@@ -9,7 +9,6 @@
   justify-content: center;
   text-align: center;
   color: white;
-  margin-top: 90px;
 }
 
 .hero-content {
@@ -115,7 +114,6 @@
 @media (max-width: 768px) {
   .services-hero {
     height: 300px;
-    margin-top: 60px;
   }
 
   .hero-content h1 {

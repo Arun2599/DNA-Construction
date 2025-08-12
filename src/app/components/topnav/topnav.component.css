@@ -14,6 +14,15 @@
   gap: 20px;
 }
 
+.contact-info a {
+  color: white;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  color: #4cc9f0;
+}
+
 .social-links {
   display: flex;
   gap: 15px;
@@ -22,6 +31,7 @@
 .social-links a {
   color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 
 /* Main Navigation */
@@ -30,7 +40,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1100;
 }
 
 .main-nav {
@@ -117,12 +127,10 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .top-info {
-    flex-direction: column;
-    gap: 5px;
-    text-align: center;
-    padding: 5px 10px;
-  }
+  /* Hide the top info bar on small screens */
+  .top-info { display: none !important; }
+
+  /* The rest of the rules below can remain; they won't affect hidden element */
 
   .contact-info {
     flex-direction: column;
@@ -139,7 +147,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
+    background: #000; /* Match header for contrast */
     flex-direction: column;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -147,6 +155,16 @@
 
   .nav-links.active {
     display: flex;
+  }
+
+  /* Ensure links remain visible on dark background in mobile menu */
+  .nav-links a {
+    color: #cbd5e1; /* slate-300 */
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: #ffffff;
   }
 
   .mobile-menu-btn.active span:nth-child(1) {

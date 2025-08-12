@@ -80,6 +80,16 @@
   color: #a0aec0;
 }
 
+.contact-details a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-details a:hover {
+  color: white;
+}
+
 .contact-details .icon {
   font-size: 20px;
   min-width: 24px;

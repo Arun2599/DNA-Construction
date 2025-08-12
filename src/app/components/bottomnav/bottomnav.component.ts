@@ -9,4 +9,13 @@ import { RouterModule } from '@angular/router';
   templateUrl: './bottomnav.component.html',
   styleUrls: ['./bottomnav.component.css']
 })
-export class BottomnavComponent {}
+export class BottomnavComponent {
+  // Scroll to top when footer navigation links are clicked
+  scrollTop() {
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } catch {
+      window.scrollTo(0, 0);
+    }
+  }
+}

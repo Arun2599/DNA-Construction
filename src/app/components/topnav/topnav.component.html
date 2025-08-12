@@ -2,11 +2,11 @@
   <div class="top-info">
     <div class="contact-info">
       <span>📍 Neyveli, Cuddalore</span>
-      <span>📞 73056 93530</span>
+      <a href="tel:+917305693530" aria-label="Call DNA Constructions">📞 73056 93530</a>
     </div>
     <div class="social-links">
-      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      <a (click)="instagram()" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a (click)="youtube()" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
     </div>
   </div>
   <div class="main-nav">
@@ -26,10 +26,10 @@
         <span></span>
       </button>
       <div class="nav-links" [class.active]="isMenuOpen">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a routerLink="/what-we-offer" routerLinkActive="active">What we offer</a>
-        <a routerLink="/projects" routerLinkActive="active">Projects</a>
-        <a routerLink="/contact" routerLinkActive="active">Contact us</a>
+        <a routerLink="/" (click)="scrollTop()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/what-we-offer" (click)="scrollTop()" routerLinkActive="active">What we offer</a>
+        <a routerLink="/projects" (click)="scrollTop()" routerLinkActive="active">Projects</a>
+        <a routerLink="/contact" (click)="scrollTop()" routerLinkActive="active">Contact us</a>
       </div>
     </div>
   </div>
