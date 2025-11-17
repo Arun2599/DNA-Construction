@@ -1,5 +1,5 @@
-import { Component, ElementRef, AfterViewInit, ViewChild, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, AfterViewInit, ViewChild, HostListener, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BottomnavComponent } from "../components/bottomnav/bottomnav.component";
 import { TopnavComponent } from "../components/topnav/topnav.component";
 
@@ -23,6 +23,8 @@ export class ProjectsComponent implements AfterViewInit {
   @ViewChild('filterScroll', { static: false }) filterScrollRef?: ElementRef<HTMLDivElement>;
   showLeft: boolean = false;
   showRight: boolean = false;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   
   projects: Project[] = [
     {
@@ -102,12 +104,15 @@ export class ProjectsComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Evaluate arrow visibility once view is ready
-    setTimeout(() => this.updateArrows(), 0);
-    // Attach scroll listener to update indicators
-    this.filterScrollRef?.nativeElement.addEventListener('scroll', this.updateArrows, { passive: true });
-    // Also on images/fonts load layout may change
-    window.addEventListener('load', this.updateArrows, { once: false });
+    // Only run browser-specific code on the client side
+    if (isPlatformBrowser(this.platformId)) {
+      // Evaluate arrow visibility once view is ready
+      setTimeout(() => this.updateArrows(), 0);
+      // Attach scroll listener to update indicators
+      this.filterScrollRef?.nativeElement.addEventListener('scroll', this.updateArrows, { passive: true });
+      // Also on images/fonts load layout may change
+      window.addEventListener('load', this.updateArrows, { once: false });
+    }
   }
 
   @HostListener('window:resize') onResize() {

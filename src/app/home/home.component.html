@@ -1,26 +1,112 @@
 <!-- Top Nav -->
 <app-topnav></app-topnav>
 
-<!-- Hero Section -->
+<!-- Premium Hero Section with Modern Effects -->
 <section class="hero-section">
+  <!-- Animated gradient background -->
+  <div class="hero-gradient-bg"></div>
+
+  <!-- Floating shapes -->
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
   <div class="hero-overlay">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>WE BUILD YOUR<br>DREAM HOUSE</h1>
-        <p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator.</p>
-        <button class="start-exploring" (click)="scrollToAbout()">Start Exploring <span class="arrow">→</span></button>
+        <div class="badge">
+          <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Premium Construction & Design
+        </div>
+
+        <h1>
+          <span class="highlight">WE BUILD</span> YOUR<br>
+          <span class="gradient-text">DREAM HOUSE</span>
+        </h1>
+
+        <p class="hero-description">Transform your vision into reality with expert craftsmanship and innovative design. We deliver exceptional construction solutions that exceed expectations.</p>
+
+        <div class="hero-buttons">
+          <button class="start-exploring" (click)="scrollToAbout()">
+            <span class="btn-text">Start Exploring</span>
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
+
+          <button class="watch-video">
+            <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <span>Watch Video</span>
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>20+</h3>
+            <p>Projects Completed</p>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <h3>3+</h3>
+            <p>Years Experience</p>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <h3>100%</h3>
+            <p>Client Satisfaction</p>
+          </div>
+        </div>
       </div>
+
+      <!-- Premium Featured Card with Glass Effect -->
       <div class="featured-card">
+        <div class="card-glow"></div>
         <div class="featured-image">
           <img src="assets/images/home-sub.svg" alt="Featured Property">
+          <div class="image-overlay">
+            <div class="overlay-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Premium
+            </div>
+          </div>
         </div>
         <div class="featured-content">
-          <h3>20+ Projects Completed</h3>
-          <p>In 3 years</p>
-          <button (click)="navigateToProjects()" class="view-details">View Details</button>
+          <div class="content-header">
+            <svg class="trophy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            <div>
+              <h3>20+ Projects</h3>
+              <p>Successfully Completed</p>
+            </div>
+          </div>
+          <p class="card-description">Excellence in every detail, delivered with precision</p>
+          <button (click)="navigateToProjects()" class="view-details">
+            <span>View Portfolio</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+    <p>Scroll Down</p>
   </div>
 </section>
 
@@ -60,45 +146,153 @@
   </div>
 </section>
 
-<!-- Services Section -->
+<!-- Premium Services Section -->
 <section class="services-section" id="services">
   <div class="services-container">
     <div class="section-header">
-      <h5>WHAT WE OFFER</h5>
-      <h2>Crafting Spaces,<br>Elevating Experiences</h2>
+      <div class="section-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        WHAT WE OFFER
+      </div>
+      <h2>Crafting Spaces,<br><span class="gradient-text">Elevating Experiences</span></h2>
+      <p class="section-description">Comprehensive solutions for your construction and design needs, delivered with expertise and precision.</p>
     </div>
-    
+
     <div class="services-grid">
-      <div class="service-card" role="article">
-        <div class="service-icon">
-          <img src="assets/images/construction-icon.svg" alt="Construction Services Icon">
+      <!-- Service Card 1 - Construction -->
+      <div class="service-card featured" role="article">
+        <div class="featured-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Popular
         </div>
-        <h3>Construction Services</h3>
-        <p>We provide end-to-end construction solutions, from planning and permits to project completion. Our experienced team ensures that every build is of the highest quality, delivered on time and within budget.</p>
+        <div class="card-gradient featured-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <img src="assets/images/construction-icon.svg" alt="Construction Services Icon" class="service-icon">
+        </div>
+
+        <div class="service-content">
+          <h3>Construction Services</h3>
+          <p>End-to-end construction solutions from planning to completion. Our experienced team delivers highest quality builds on time and within budget.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Quality Assurance
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              On-Time Delivery
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-footer">
+          <a href="/what-we-offer" class="learn-more">
+            <span>Learn More</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
       </div>
 
+      <!-- Service Card 2 - 3D & 2D Drawings -->
       <div class="service-card" role="article">
-        <div class="service-icon">
-          <img src="assets/images/drawing-icon.svg" alt="3D & 2D Drawings Icon">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <img src="assets/images/drawing-icon.svg" alt="3D & 2D Drawings Icon" class="service-icon">
         </div>
-        <h3>3D & 2D Drawings</h3>
-        <p>Our architectural drawings bring your vision to life. With detailed 3D models and 2D plans, we offer clear and accurate designs that help you visualize your project before construction begins.</p>
+
+        <div class="service-content">
+          <h3>3D & 2D Drawings</h3>
+          <p>Detailed architectural drawings that bring your vision to life with clear and accurate designs to visualize your project before construction.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              3D Visualization
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Detailed Plans
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-footer">
+          <a href="/what-we-offer" class="learn-more">
+            <span>Learn More</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
       </div>
 
+      <!-- Service Card 3 - Interior Design -->
       <div class="service-card" role="article">
-        <div class="service-icon">
-          <img src="assets/images/interior-icon.svg" alt="Interior Design Icon">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <img src="assets/images/interior-icon.svg" alt="Interior Design Icon" class="service-icon">
         </div>
-        <h3>Interior Design</h3>
-        <p>We create stunning, functional interiors that reflect your style and needs. From layout planning to choosing materials and finishes, our team ensures every detail enhances the look and feel of your space.</p>
+
+        <div class="service-content">
+          <h3>Interior Design</h3>
+          <p>Stunning, functional interiors that reflect your style. From layout planning to materials and finishes, we enhance every detail of your space.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Custom Design
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Material Selection
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-footer">
+          <a href="/what-we-offer" class="learn-more">
+            <span>Learn More</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
 
     <div class="view-all-container">
-      <a href="/services" class="view-all-link" aria-label="View all services">
-        View all services
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+      <a href="/what-we-offer" class="view-all-btn" aria-label="View all services">
+        <span>View All Services</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
       </a>
     </div>
@@ -194,8 +388,10 @@
             <div class="quote-icon">❝</div>
             <p class="testimonial-text">It's been such a lovely journey to be associated with the Vignesh homes. They make it so easy to help you build your dream home! The kind of personal comfort and relationship they share with their customers makes the most tedious journey of building ones home, the most joyful and happy experience.</p>
             <div class="client-info">
-              <h4>Mr. ARUNKUMAR</h4>
-              <p>Chennai</p>
+              <div>
+                <h4>Mr. ARUNKUMAR</h4>
+                <p>Chennai</p>
+              </div>
             </div>
           </div>
 
@@ -203,8 +399,10 @@
             <div class="quote-icon">❝</div>
             <p class="testimonial-text">It's been such a lovely journey to be associated with the Vignesh homes. They make it so easy to help you build your dream home! The kind of personal comfort and relationship they share with their customers makes the most tedious journey of building ones home, the most joyful and happy experience.</p>
             <div class="client-info">
-              <h4>Mr. ARUNKUMAR</h4>
-              <p>Chennai</p>
+              <div>
+                <h4>Mr. ARUNKUMAR</h4>
+                <p>Chennai</p>
+              </div>
             </div>
           </div>
 
@@ -212,8 +410,10 @@
             <div class="quote-icon">❝</div>
             <p class="testimonial-text">It's been such a lovely journey to be associated with the Vignesh homes. They make it so easy to help you build your dream home! The kind of personal comfort and relationship they share with their customers makes the most tedious journey of building ones home, the most joyful and happy experience.</p>
             <div class="client-info">
-              <h4>Mr. ARUNKUMAR</h4>
-              <p>Chennai</p>
+              <div>
+                <h4>Mr. ARUNKUMAR</h4>
+                <p>Chennai</p>
+              </div>
             </div>
           </div>
         </div>

@@ -1,42 +1,169 @@
 <!-- Top Nav -->
 <app-topnav></app-topnav>
 
-<!-- Projects Hero Section -->
+<!-- Premium Projects Hero Section -->
 <section class="projects-hero">
+  <!-- Animated gradient background -->
+  <div class="hero-gradient-bg"></div>
+
+  <!-- Floating shapes -->
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
+
   <div class="hero-content">
-    <span class="subtitle">PROJECTS</span>
-    <h1>A SNIPPET OF <span class="highlight">PROJECTS</span></h1>
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      <span>Projects</span>
+    </div>
+
+    <div class="badge">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+      </svg>
+      OUR PORTFOLIO
+    </div>
+
+    <h1>Showcase of Our <span class="gradient-text">Best Projects</span></h1>
+    <p class="hero-description">Explore our collection of completed construction and design projects that showcase our commitment to quality and excellence.</p>
+
+    <!-- Stats Counter -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <h3>{{filteredProjects.length}}+</h3>
+        <p>Total Projects</p>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <h3>100%</h3>
+        <p>Client Satisfaction</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
   </div>
 </section>
 
-<!-- Projects Filter Section -->
+<!-- Premium Projects Filter Section -->
 <section class="projects-section">
-  <div class="filter-tabs-wrapper">
-    <button class="tabs-arrow left" (click)="scrollLeftBy()" [class.visible]="showLeft" aria-label="Scroll left">&#10094;</button>
-    <div class="filter-tabs" #filterScroll>
-      <button [class.active]="activeFilter === 'all'" (click)="filterProjects('all')">ALL WORKS</button>
-      <button [class.active]="activeFilter === 'construction'" (click)="filterProjects('construction')">CONSTRUCTION</button>
-      <button [class.active]="activeFilter === 'architecture'" (click)="filterProjects('architecture')">ARCHITECTURE</button>
-      <button [class.active]="activeFilter === 'building'" (click)="filterProjects('building')">BUILDING</button>
-      <button [class.active]="activeFilter === 'renovation'" (click)="filterProjects('renovation')">RENOVATION</button>
-      <button [class.active]="activeFilter === 'interior'" (click)="filterProjects('interior')">INTERIOR</button>
+  <!-- Filter Bar with Glass Morphism -->
+  <div class="filter-bar-container">
+    <div class="filter-header">
+      <h2>Filter by Category</h2>
+      <p>Browse through our diverse range of projects</p>
     </div>
-    <button class="tabs-arrow right" (click)="scrollRightBy()" [class.visible]="showRight" aria-label="Scroll right">&#10095;</button>
-    <div class="fade left" [class.show]="showLeft"></div>
-    <div class="fade right" [class.show]="showRight"></div>
+
+    <div class="filter-tabs-wrapper">
+      <button class="tabs-arrow left" (click)="scrollLeftBy()" [class.visible]="showLeft" aria-label="Scroll left">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+
+      <div class="filter-tabs" #filterScroll>
+        <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="filterProjects('all')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          <span>All Works</span>
+        </button>
+
+        <button class="filter-btn" [class.active]="activeFilter === 'construction'" (click)="filterProjects('construction')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          <span>Construction</span>
+        </button>
+
+        <button class="filter-btn" [class.active]="activeFilter === 'architecture'" (click)="filterProjects('architecture')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Architecture</span>
+        </button>
+
+        <button class="filter-btn" [class.active]="activeFilter === 'building'" (click)="filterProjects('building')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          <span>Building</span>
+        </button>
+
+        <button class="filter-btn" [class.active]="activeFilter === 'renovation'" (click)="filterProjects('renovation')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>Renovation</span>
+        </button>
+
+        <button class="filter-btn" [class.active]="activeFilter === 'interior'" (click)="filterProjects('interior')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+          </svg>
+          <span>Interior</span>
+        </button>
+      </div>
+
+      <button class="tabs-arrow right" (click)="scrollRightBy()" [class.visible]="showRight" aria-label="Scroll right">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <div class="fade left" [class.show]="showLeft"></div>
+      <div class="fade right" [class.show]="showRight"></div>
+    </div>
   </div>
 
-  <div class="projects-grid">
-    <div class="project-card" *ngFor="let project of filteredProjects">
-      <div class="project-image">
-        <img [src]="project.imageUrl" [alt]="project.title">
-        <div class="project-overlay">
-          <div class="project-info">
-            <h3>{{project.title}}</h3>
-            <p>{{project.description}}</p>
+  <!-- Premium Projects Grid -->
+  <div class="projects-container">
+    <div class="projects-grid">
+      <div class="project-card" *ngFor="let project of filteredProjects; let i = index">
+        <div class="card-glow"></div>
+        <div class="project-image">
+          <img [src]="project.imageUrl" [alt]="project.title" loading="lazy">
+          <div class="image-overlay"></div>
+
+          <!-- Category Badge -->
+          <div class="category-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
+            {{project.category}}
+          </div>
+
+          <div class="project-overlay">
+            <div class="project-info">
+              <h3>{{project.title}}</h3>
+              <p>{{project.description}}</p>
+              <button class="view-project-btn">
+                <span>View Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- No Results Message -->
+    <div class="no-results" *ngIf="filteredProjects.length === 0">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <h3>No Projects Found</h3>
+      <p>Try selecting a different category</p>
     </div>
   </div>
 </section>

@@ -1,79 +1,313 @@
 <!-- Top Nav -->
 <app-topnav></app-topnav>
 
-<!-- Services Hero Section -->
+<!-- Premium Services Hero Section -->
 <section class="services-hero">
+  <!-- Animated gradient background -->
+  <div class="hero-gradient-bg"></div>
+
+  <!-- Floating shapes -->
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
+
   <div class="hero-content">
-    <span class="subtitle">SERVICES</span>
-    <h1>WHAT WE <span class="highlight">OFFERS</span></h1>
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      <span>Services</span>
+    </div>
+
+    <div class="badge">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+      OUR SERVICES
+    </div>
+
+    <h1>Comprehensive Solutions for <span class="gradient-text">Every Need</span></h1>
+    <p class="hero-description">From concept to completion, we offer a full range of construction and design services tailored to bring your vision to life.</p>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
   </div>
 </section>
 
-<!-- Services Description Section -->
-<section class="services-description">
-  <div class="description-header">
-    <h2>WHAT WE OFFER</h2>
-    <h3>Crafting Spaces,<br>Elevating Experiences</h3>
-  </div>
-
-  <div class="services-grid">
-    <!-- Construction Services -->
-    <div class="service-card">
-      <div class="service-icon">🏗️</div>
-      <h4>Construction Services</h4>
-      <p>We provide end-to-end construction solutions, from planning and permits to project completion. Our experienced team ensures that every build is of the highest quality, delivered on time and within budget.</p>
+<!-- Premium Services Section -->
+<section class="services-section">
+  <div class="services-container">
+    <!-- Section Header -->
+    <div class="section-header">
+      <div class="section-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+        </svg>
+        WHAT WE OFFER
+      </div>
+      <h2>Crafting Spaces,<br><span class="gradient-text">Elevating Experiences</span></h2>
+      <p class="section-description">Comprehensive solutions for your construction and design needs, delivered with expertise and precision.</p>
     </div>
 
-    <!-- 3D & 2D Drawings -->
-    <div class="service-card">
-      <div class="service-icon">📐</div>
-      <h4>3D & 2D Drawings</h4>
-      <p>Our architectural drawings bring your vision to life, with detailed 3D models and 2D plans. We offer clear and accurate designs that help you visualize your project before construction begins.</p>
+    <!-- Services Grid -->
+    <div class="services-grid">
+      <!-- Service 1: Construction Services -->
+      <div class="service-card">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>Construction Services</h3>
+          <p>End-to-end construction solutions from planning to completion. Our experienced team delivers highest quality builds on time and within budget.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Quality Assurance
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              On-Time Delivery
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Budget Management
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 2: 3D & 2D Drawings (Featured) -->
+      <div class="service-card featured">
+        <div class="featured-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+          </svg>
+          Popular
+        </div>
+        <div class="card-gradient featured-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>3D & 2D Drawings</h3>
+          <p>Detailed architectural drawings that bring your vision to life with clear and accurate designs to visualize your project before construction.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              3D Visualization
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Detailed Floor Plans
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Accurate Measurements
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 3: Interior Design -->
+      <div class="service-card">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>Interior Design</h3>
+          <p>Stunning, functional interiors that reflect your style. From layout planning to materials and finishes, we enhance every detail of your space.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Custom Design
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Material Selection
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Space Optimization
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 4: Renovation & Remodeling -->
+      <div class="service-card">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>Renovation & Remodeling</h3>
+          <p>Transform existing spaces with our renovation expertise. We modernize and upgrade while preserving structural integrity and character.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Modern Upgrades
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Structural Assessment
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Value Enhancement
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 5: Project Consultation -->
+      <div class="service-card">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>Project Consultation</h3>
+          <p>Expert guidance from initial concept to final execution. Our consultants help you make informed decisions for successful project outcomes.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Expert Advice
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Cost Estimation
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Timeline Planning
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 6: Permit & Documentation -->
+      <div class="service-card">
+        <div class="card-gradient"></div>
+        <div class="card-glow-effect"></div>
+
+        <div class="service-icon-wrapper">
+          <div class="icon-bg"></div>
+          <svg class="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+
+        <div class="service-content">
+          <h3>Permit & Documentation</h3>
+          <p>Navigate complex regulatory requirements with ease. We handle all permits, approvals, and documentation for seamless project execution.</p>
+
+          <ul class="service-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Permit Processing
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Legal Compliance
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Document Management
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <!-- Interior Design -->
-    <div class="service-card">
-      <div class="service-icon">🎨</div>
-      <h4>Interior Design</h4>
-      <p>We create stunning, functional interiors that reflect your style and needs. From layout planning to choosing materials and finishes, our team ensures every detail enhances the look and feel of your space.</p>
-    </div>
-
-    <!-- Repeat cards for visual effect -->
-    <div class="service-card">
-      <div class="service-icon">🏗️</div>
-      <h4>Construction Services</h4>
-      <p>We provide end-to-end construction solutions, from planning and permits to project completion. Our experienced team ensures that every build is of the highest quality, delivered on time and within budget.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">📐</div>
-      <h4>3D & 2D Drawings</h4>
-      <p>Our architectural drawings bring your vision to life, with detailed 3D models and 2D plans. We offer clear and accurate designs that help you visualize your project before construction begins.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">🎨</div>
-      <h4>Interior Design</h4>
-      <p>We create stunning, functional interiors that reflect your style and needs. From layout planning to choosing materials and finishes, our team ensures every detail enhances the look and feel of your space.</p>
-    </div>
-
-    <!-- Additional cards -->
-    <div class="service-card">
-      <div class="service-icon">🏗️</div>
-      <h4>Construction Services</h4>
-      <p>We provide end-to-end construction solutions, from planning and permits to project completion. Our experienced team ensures that every build is of the highest quality, delivered on time and within budget.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">📐</div>
-      <h4>3D & 2D Drawings</h4>
-      <p>Our architectural drawings bring your vision to life, with detailed 3D models and 2D plans. We offer clear and accurate designs that help you visualize your project before construction begins.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon">🎨</div>
-      <h4>Interior Design</h4>
-      <p>We create stunning, functional interiors that reflect your style and needs. From layout planning to choosing materials and finishes, our team ensures every detail enhances the look and feel of your space.</p>
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h3>Ready to Start Your Project?</h3>
+      <p>Let's discuss how we can bring your vision to life with our comprehensive services.</p>
+      <a href="/contact" class="cta-btn">
+        <span>Get Started</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
     </div>
   </div>
 </section>
