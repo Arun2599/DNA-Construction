@@ -40,7 +40,7 @@ section {
   background-blend-mode: overlay;
   display: flex;
   align-items: center;
-  padding: 0 5%;
+  padding: 120px 5%;
   overflow: hidden;
 }
 
@@ -196,11 +196,8 @@ section {
 }
 
 .gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 30px rgba(76, 201, 240, 0.3));
+  color: #4CC9F0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(76, 201, 240, 0.5);
 }
 
 .hero-description {
@@ -522,6 +519,7 @@ section {
   gap: 10px;
   animation: fadeIn 1s ease-out 1.2s both;
   z-index: 10;
+  pointer-events: none;
 }
 
 .mouse {
@@ -983,11 +981,12 @@ section {
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 15px;
   object-fit: contain;
   z-index: 2;
-  filter: drop-shadow(0 2px 8px rgba(76, 201, 240, 0.2));
+  filter: drop-shadow(0 2px 8px rgba(76, 201, 240, 0.3));
   transition: transform var(--transition-base);
+  display: block;
 }
 
 .service-card:hover .service-icon {
@@ -1307,16 +1306,24 @@ section {
     min-width: 280px;
     flex: 0 0 calc(50% - 15px);
   }
-  
+
+  .hero-section {
+    padding: 100px 5% 120px;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  
+
   .featured-card {
     grid-column: 1 / -1;
     max-width: 400px;
     margin: 0 auto;
+  }
+
+  .hero-stats {
+    margin-bottom: 40px;
   }
 }
 
@@ -1324,6 +1331,7 @@ section {
   .hero-section {
     background-attachment: scroll;
     min-height: 90vh;
+    padding: 80px 5% 120px;
   }
 
   .hero-text h1 {
@@ -1338,6 +1346,7 @@ section {
   .hero-stats {
     gap: 20px;
     flex-wrap: wrap;
+    margin-bottom: 60px;
   }
 
   .stat-item h3 {
@@ -1346,6 +1355,10 @@ section {
 
   .stat-divider {
     display: none;
+  }
+
+  .scroll-indicator {
+    bottom: 30px;
   }
 
   .services-grid {
@@ -1378,7 +1391,7 @@ section {
 
   .hero-section {
     min-height: 85vh;
-    padding: 0 20px;
+    padding: 80px 20px 140px;
   }
 
   .hero-text h1 {
@@ -1413,6 +1426,7 @@ section {
 
   .hero-stats {
     gap: 15px;
+    margin-bottom: 80px;
   }
 
   .stat-item h3 {
@@ -1421,6 +1435,10 @@ section {
 
   .stat-item p {
     font-size: 12px;
+  }
+
+  .scroll-indicator {
+    bottom: 20px;
   }
 
   .project-image {
@@ -2069,6 +2087,10 @@ section {
     padding: 60px 3%;
   }
 
+  .hero-section {
+    padding: 100px 3% 120px;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
   }
@@ -2089,6 +2111,10 @@ section {
 
   .company-info {
     grid-template-columns: 1fr;
+  }
+
+  .hero-stats {
+    margin-bottom: 50px;
   }
 }
 
@@ -2168,12 +2194,24 @@ section {
   }
 
   .testimonial-card {
-    min-width: 350px;
-    padding: 35px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 30px 25px;
   }
 
   .testimonial-text {
     font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 25px;
+  }
+
+  .quote-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+
+  .client-info {
+    padding-top: 20px;
   }
 
   .contact-section {
@@ -2269,12 +2307,21 @@ section {
   }
 
   .testimonial-card {
-    min-width: 260px;
-    padding: 25px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 25px 20px;
   }
 
   .project-card {
     min-width: 260px;
+  }
+
+  .testimonials-scroll {
+    padding: 20px 0;
+  }
+
+  .testimonials-track {
+    gap: 20px;
   }
 
   .contact-card {
@@ -2386,23 +2433,29 @@ section {
   }
 
   .testimonial-card {
-    min-width: 280px;
-    padding: 28px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 25px 20px;
   }
 
   .testimonial-card::before {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
 
   .quote-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
   }
 
   .testimonial-text {
     font-size: 0.95rem;
-    margin-bottom: 25px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .client-info {
+    padding-top: 18px;
   }
 
   .client-info::before {
@@ -2416,6 +2469,15 @@ section {
 
   .client-info p {
     font-size: 0.85rem;
+  }
+
+  .testimonials-scroll {
+    padding: 15px 0;
+    margin: 30px 0;
+  }
+
+  .testimonials-track {
+    gap: 15px;
   }
 
   .contact-section {
