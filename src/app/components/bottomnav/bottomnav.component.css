@@ -2,6 +2,8 @@
   background-color: #0f1419;
   color: white;
   padding: 60px 20px 20px;
+  overflow: hidden; /* Prevent content overflow */
+  width: 100%;
 }
 
 .footer-content {
@@ -10,6 +12,8 @@
   display: grid;
   grid-template-columns: 1.5fr 1fr 1.5fr;
   gap: 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Brand Section */
@@ -17,6 +21,9 @@
   display: flex;
   align-items: flex-start;
   gap: 20px;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .footer-logo {
@@ -24,16 +31,28 @@
   height: auto;
 }
 
+.brand-text {
+  flex: 1;
+  min-width: 0; /* Allow text to shrink */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 .brand-text h2 {
   font-size: 24px;
   margin: 0;
   font-weight: 500;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .brand-text h3 {
   font-size: 24px;
   margin: 0;
   color: #4cc9f0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Quick Links Section */
@@ -60,6 +79,12 @@
 }
 
 /* Contact Section */
+.footer-contact {
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
 .footer-contact h4 {
   font-size: 18px;
   margin: 0 0 20px;
@@ -70,6 +95,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
 }
 
 .contact-details p {
@@ -78,6 +104,10 @@
   gap: 10px;
   margin: 0;
   color: #a0aec0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .contact-details a {
@@ -102,6 +132,9 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   color: #a0aec0;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Responsive Design */
@@ -118,26 +151,63 @@
 
 @media (max-width: 768px) {
   .footer {
-    padding: 40px 20px 20px;
+    padding: 40px 15px 20px;
+    overflow-x: hidden;
   }
 
   .footer-content {
     grid-template-columns: 1fr;
     gap: 30px;
     text-align: center;
+    padding: 0 5px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .footer-brand {
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .brand-text {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer-links {
+    width: 100%;
+    max-width: 100%;
   }
 
   .footer-links nav {
     align-items: center;
   }
 
+  .footer-contact {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-details {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .contact-details p {
     justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-bottom {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 10px 0;
+    word-break: break-word;
   }
 }
 
