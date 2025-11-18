@@ -11,6 +11,14 @@
   left: 0;
   z-index: var(--z-fixed);
   backdrop-filter: blur(10px);
+  transform: translateY(0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navbar Hidden State - Smooth slide up animation */
+.navbar.navbar-hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
 }
 
 /* ===================================

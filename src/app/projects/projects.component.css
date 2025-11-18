@@ -12,9 +12,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100px 20px 80px;
+  padding: 100px 20px 100px;
   overflow: hidden;
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.85) 100%),
+              url('/assets/images/project.jpg');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+}
+
+.projects-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
+  z-index: 1;
 }
 
 /* Animated gradient background */
@@ -108,8 +120,9 @@
   gap: 12px;
   margin-bottom: 25px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   animation: fadeIn 0.8s ease-out 0.2s both;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 @keyframes fadeIn {
@@ -118,23 +131,24 @@
 }
 
 .breadcrumb a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   transition: color var(--transition-base);
 }
 
 .breadcrumb a:hover {
-  color: var(--color-primary);
+  color: #ffffff;
 }
 
 .breadcrumb svg {
   width: 16px;
   height: 16px;
   stroke-width: 2px;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
 }
 
 .breadcrumb span {
-  color: var(--color-primary);
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -166,17 +180,15 @@
 .hero-content h1 {
   font-size: 56px;
   font-weight: 800;
-  color: var(--color-light);
+  color: #ffffff;
   margin: 0 0 25px;
   line-height: 1.2;
   animation: fadeIn 0.8s ease-out 0.6s both;
+  text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #4CC9F0;
   position: relative;
   display: inline-block;
 }
@@ -184,11 +196,12 @@
 /* Hero description */
 .hero-description {
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.7;
   max-width: 700px;
   margin: 0 auto 40px;
   animation: fadeIn 0.8s ease-out 0.8s both;
+  text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 /* Hero stats */
@@ -235,6 +248,7 @@
   transform: translateX(-50%);
   animation: fadeIn 1s ease-out 1.2s both;
   z-index: 10;
+  pointer-events: none;
 }
 
 .mouse {
@@ -707,7 +721,11 @@
 @media (max-width: 768px) {
   .projects-hero {
     min-height: 55vh;
-    padding: 60px 20px 50px;
+    padding: 80px 20px 100px;
+  }
+
+  .scroll-indicator {
+    bottom: 30px;
   }
 
   .hero-content h1 {
@@ -750,7 +768,11 @@
 @media (max-width: 480px) {
   .projects-hero {
     min-height: 50vh;
-    padding: 50px 15px 40px;
+    padding: 80px 15px 100px;
+  }
+
+  .scroll-indicator {
+    bottom: 20px;
   }
 
   .hero-content h1 {
