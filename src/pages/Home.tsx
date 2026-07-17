@@ -311,8 +311,8 @@ export default function Home() {
       {/* ============ ABOUT ============ */}
       <section className="overflow-hidden bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
-          <div className="grid items-start gap-12 lg:grid-cols-2">
-            <Reveal stagger={0.1}>
+          <div className="grid items-stretch gap-12 lg:grid-cols-2">
+            <Reveal stagger={0.1} className="flex flex-col justify-center">
               <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
                 <span className="h-px w-10 bg-primary" />
                 About us
@@ -337,22 +337,28 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-
-              <div className="group relative mt-12 w-fit">
-                <div className="absolute -inset-3 rotate-[-2deg] rounded-3xl bg-primary transition-transform duration-500 group-hover:rotate-0" />
-                <img
-                  src="/images/about-sub.svg"
-                  alt="DNA Constructions team at work"
-                  className="relative h-[320px] w-full rotate-[1.5deg] rounded-2xl object-cover shadow-2xl transition-transform duration-500 group-hover:rotate-0 md:h-[400px]"
-                />
-                <div className="absolute -bottom-5 -right-4 rotate-[3deg] rounded-2xl bg-sun px-5 py-3 font-display text-xl uppercase text-ink shadow-xl transition-transform duration-500 group-hover:rotate-0">
-                  Since 2022
-                </div>
-              </div>
             </Reveal>
 
-            <Reveal stagger={0.12} className="flex flex-col gap-6 lg:pt-24">
-              {[
+            <Reveal delay={0.15}>
+              <div className="group relative h-full min-h-[420px] overflow-hidden rounded-[2rem] shadow-2xl md:min-h-[520px]">
+                <img
+                  src="/images/team.jpg"
+                  alt="The DNA Constructions team"
+                  className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/50 to-transparent" />
+                <span className="absolute left-5 top-5 rounded-full bg-white/85 px-4 py-2 text-xs font-bold uppercase tracking-wide text-ink shadow-md backdrop-blur-md">
+                  The DNA Team
+                </span>
+                <span className="absolute bottom-5 right-5 rotate-[-2deg] rounded-2xl bg-sun px-5 py-3 font-display text-xl uppercase text-ink shadow-xl transition-transform duration-500 group-hover:rotate-0">
+                  Since 2022
+                </span>
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal stagger={0.12} className="mt-14 grid gap-7 md:grid-cols-3">
+            {[
                 {
                   n: '01',
                   h: 'Vision',
@@ -390,8 +396,7 @@ export default function Home() {
                   <p className={`mt-3 font-medium leading-relaxed ${item.dark ? 'text-white/70' : 'text-ink/75'}`}>{item.p}</p>
                 </div>
               ))}
-            </Reveal>
-          </div>
+          </Reveal>
         </div>
       </section>
 
