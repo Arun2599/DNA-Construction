@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 
@@ -22,7 +22,17 @@ const projects = [
 
 export default function Projects() {
   const [filter, setFilter] = useState<(typeof categories)[number]>('all')
+  const topRef = useRef<HTMLDivElement>(null)
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
+
+  const changeFilter = (c: (typeof categories)[number]) => {
+    setFilter(c)
+    // jump back to the top of the results so the new list starts in view
+    const marker = topRef.current
+    if (!marker) return
+    const y = marker.getBoundingClientRect().top + window.scrollY - 88
+    if (window.scrollY > y) window.scrollTo({ top: y, behavior: 'smooth' })
+  }
 
   return (
     <main>
@@ -39,20 +49,24 @@ export default function Projects() {
 
       <section className="bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
-          <Reveal className="mb-14 flex flex-wrap justify-center gap-3">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setFilter(c)}
-                className={`rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 active:scale-95 ${
-                  filter === c
-                    ? 'scale-105 bg-ink text-white shadow-xl'
-                    : 'bg-white text-ink/60 shadow-sm hover:-translate-y-0.5 hover:text-ink hover:shadow-md'
-                }`}
-              >
-                {c === 'all' ? 'All Works' : c}
-              </button>
-            ))}
+          <div ref={topRef} />
+          {/* sticky filter bar — stays reachable however deep you scroll */}
+          <Reveal className="sticky top-20 z-30 mb-12 lg:top-24">
+            <div className="mx-auto flex gap-2 overflow-x-auto rounded-full border border-black/5 bg-white/85 p-2 shadow-lg shadow-black/10 backdrop-blur-xl lg:w-fit">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => changeFilter(c)}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 active:scale-95 md:px-6 ${
+                    filter === c
+                      ? 'bg-ink text-white shadow-md'
+                      : 'text-ink/60 hover:bg-black/5 hover:text-ink'
+                  }`}
+                >
+                  {c === 'all' ? 'All Works' : c}
+                </button>
+              ))}
+            </div>
           </Reveal>
 
           <div key={filter} className="grid gap-7 lg:grid-cols-12">
@@ -62,7 +76,7 @@ export default function Projects() {
                 delay={(i % 2) * 0.08}
                 y={30}
                 className={[7, 5, 5, 7][i % 4] === 7 ? 'lg:col-span-7' : 'lg:col-span-5'}
-                stackTop={96 + (i % 5) * 10}
+                stackTop={152 + (i % 5) * 10}
               >
                 <div className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]">
                   <img
