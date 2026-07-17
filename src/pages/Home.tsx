@@ -481,24 +481,35 @@ export default function Home() {
           <div className="grid gap-7 md:grid-cols-12">
             {featuredProjects.map((p, i) => (
               <Reveal key={p.title} delay={(i % 2) * 0.1} className={p.span}>
-                <Link to="/projects" className="group relative block overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-                  <div className="overflow-hidden">
-                    <img
-                      src={p.img}
-                      alt={p.title}
-                      className="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
-                  </div>
+                <Link
+                  to="/projects"
+                  className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[420px]"
+                >
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent transition-opacity duration-500 group-hover:from-ink/95" />
+
                   <span className="absolute left-5 top-5 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0">
                     {p.tag}
                   </span>
-                  <div className="flex items-center justify-between p-6">
-                    <h3 className="font-display text-2xl uppercase leading-none">{p.title}</h3>
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-white transition-all duration-300 group-hover:rotate-45 group-hover:bg-primary group-hover:text-ink">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                      </svg>
-                    </span>
+
+                  <span className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-500 group-hover:rotate-45 group-hover:opacity-100">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                  </span>
+
+                  <span className="pointer-events-none absolute -bottom-2 right-4 font-display text-7xl leading-none text-white/10 transition-colors duration-500 group-hover:text-primary/30 md:text-8xl">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-7">
+                    <h3 className="font-display text-2xl uppercase leading-none transition-transform duration-500 group-hover:-translate-y-1 md:text-3xl">
+                      {p.title}
+                    </h3>
                   </div>
                 </Link>
               </Reveal>
