@@ -10,6 +10,8 @@ export const prefersReducedMotion = () =>
 /**
  * Fades + slides content in once it scrolls into view.
  * With `stagger`, animates direct children one after another instead of the block.
+ * With `stackTop`, below lg the element becomes a sticky stacking card: it pins at
+ * `stackTop` px and scales back slightly as the next card scrolls over it.
  */
 export default function Reveal({
   children,
@@ -18,6 +20,7 @@ export default function Reveal({
   y = 40,
   stagger = 0,
   blur = false,
+  stackTop,
 }: {
   children: ReactNode
   className?: string
@@ -25,6 +28,7 @@ export default function Reveal({
   y?: number
   stagger?: number
   blur?: boolean
+  stackTop?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -56,8 +60,29 @@ export default function Reveal({
     }
   }, [delay, y, stagger, blur])
 
+  // deck effect: once stuck, scale back while the next card slides over
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el || stackTop == null) return
+    if (prefersReducedMotion() || !window.matchMedia('(max-width: 1023px)').matches) return
+    const tween = gsap.to(el, {
+      scale: 0.94,
+      transformOrigin: 'center top',
+      ease: 'none',
+      scrollTrigger: { trigger: el, start: `top ${stackTop + 10}px`, end: '+=350', scrub: true },
+    })
+    return () => {
+      tween.scrollTrigger?.kill()
+      tween.kill()
+    }
+  }, [stackTop])
+
   return (
-    <div ref={ref} className={className}>
+    <div
+      ref={ref}
+      className={`${stackTop != null ? 'max-lg:sticky' : ''} ${className}`}
+      style={stackTop != null ? { top: stackTop } : undefined}
+    >
       {children}
     </div>
   )

@@ -100,10 +100,10 @@ const services = [
 ]
 
 const featuredProjects = [
-  { title: 'Edakuppam Residential', tag: 'Interior · Construction', img: '/images/project.jpg', span: 'md:col-span-7' },
-  { title: 'Commercial Complex', tag: 'Architecture · Construction', img: '/images/we-offer.jpg', span: 'md:col-span-5' },
-  { title: 'Modern Office Space', tag: 'Interior · Renovation', img: '/images/home-sub.svg', span: 'md:col-span-5' },
-  { title: 'Luxury Residence', tag: 'Architecture · Interior', img: '/images/home-hero.svg', span: 'md:col-span-7' },
+  { title: 'Edakuppam Residential', tag: 'Interior · Construction', img: '/images/project.jpg', span: 'lg:col-span-7' },
+  { title: 'Commercial Complex', tag: 'Architecture · Construction', img: '/images/we-offer.jpg', span: 'lg:col-span-5' },
+  { title: 'Modern Office Space', tag: 'Interior · Renovation', img: '/images/home-sub.svg', span: 'lg:col-span-5' },
+  { title: 'Luxury Residence', tag: 'Architecture · Interior', img: '/images/home-hero.svg', span: 'lg:col-span-7' },
 ]
 
 /* ponytail: placeholder reviews around the one real quote — swap in real client
@@ -309,7 +309,7 @@ export default function Home() {
       </section>
 
       {/* ============ ABOUT ============ */}
-      <section className="overflow-hidden bg-mist py-24 text-ink md:py-32">
+      <section className="bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
           <div className="grid items-stretch gap-12 lg:grid-cols-2">
             <Reveal stagger={0.1} className="flex flex-col justify-center">
@@ -357,7 +357,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <Reveal stagger={0.12} className="mt-14 grid gap-7 md:grid-cols-3">
+          <div className="mt-14 grid gap-7 lg:grid-cols-3">
             {[
                 {
                   n: '01',
@@ -383,9 +383,9 @@ export default function Home() {
                   dark: false,
                   tilt: -1,
                 },
-              ].map((item) => (
+              ].map((item, i) => (
+              <Reveal key={item.h} delay={(i % 3) * 0.1} stackTop={96 + i * 10}>
                 <div
-                  key={item.h}
                   className={`${item.bg} ${item.dark ? 'text-white' : 'text-ink'} rounded-3xl p-7 shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:p-8`}
                   style={{ rotate: `${item.tilt}deg` }}
                 >
@@ -395,8 +395,9 @@ export default function Home() {
                   </div>
                   <p className={`mt-3 font-medium leading-relaxed ${item.dark ? 'text-white/70' : 'text-ink/75'}`}>{item.p}</p>
                 </div>
-              ))}
-          </Reveal>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -413,9 +414,9 @@ export default function Home() {
             </h2>
           </Reveal>
 
-          <div className="grid gap-7 md:grid-cols-3">
+          <div className="grid gap-7 lg:grid-cols-3">
             {services.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.1}>
+              <Reveal key={s.title} delay={i * 0.1} stackTop={96 + i * 10}>
                 <div
                   className={`${s.bg} ${s.dark ? 'text-white' : 'text-ink'} group flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
                   style={{ rotate: `${s.tilt}deg` }}
@@ -478,9 +479,9 @@ export default function Home() {
             </Magnetic>
           </Reveal>
 
-          <div className="grid gap-7 md:grid-cols-12">
+          <div className="grid gap-7 lg:grid-cols-12">
             {featuredProjects.map((p, i) => (
-              <Reveal key={p.title} delay={(i % 2) * 0.1} className={p.span}>
+              <Reveal key={p.title} delay={(i % 2) * 0.1} className={p.span} stackTop={96 + (i % 4) * 10}>
                 <Link
                   to="/projects"
                   className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[420px]"

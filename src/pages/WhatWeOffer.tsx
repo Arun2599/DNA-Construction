@@ -70,9 +70,9 @@ export default function WhatWeOffer() {
 
       <section className="bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
-          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-7 lg:grid-cols-3">
             {services.map((s, i) => (
-              <Reveal key={s.title} delay={(i % 3) * 0.1}>
+              <Reveal key={s.title} delay={(i % 3) * 0.1} stackTop={96 + (i % 6) * 8}>
                 <div
                   className={`${s.bg} ${s.dark ? 'text-white' : 'text-ink'} flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
                   style={{ rotate: `${s.tilt}deg` }}

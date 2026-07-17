@@ -55,13 +55,14 @@ export default function Projects() {
             ))}
           </Reveal>
 
-          <div key={filter} className="grid gap-7 md:grid-cols-12">
+          <div key={filter} className="grid gap-7 lg:grid-cols-12">
             {filtered.map((p, i) => (
               <Reveal
                 key={p.title}
                 delay={(i % 2) * 0.08}
                 y={30}
-                className={[7, 5, 5, 7][i % 4] === 7 ? 'md:col-span-7' : 'md:col-span-5'}
+                className={[7, 5, 5, 7][i % 4] === 7 ? 'lg:col-span-7' : 'lg:col-span-5'}
+                stackTop={96 + (i % 5) * 10}
               >
                 <div className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]">
                   <img
