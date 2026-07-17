@@ -117,7 +117,7 @@ export default function Contact() {
                   WhatsApp
                 </a>
               </div>
-              <img src="/images/contact-us.svg" alt="Contact DNA Constructions" className="relative hidden h-80 w-full rounded-[2rem] object-cover shadow-2xl md:block" />
+              <img src="/images/we-offer.jpg" alt="DNA Constructions engineer reviewing plans on site" className="relative hidden h-80 w-full rounded-[2rem] object-cover shadow-2xl md:block" />
             </div>
           </Reveal>
         </div>
