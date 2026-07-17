@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "dna-constructions-architects",
-    "public": "dist/dna-constructions/browser",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
