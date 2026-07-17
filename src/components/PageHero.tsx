@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { prefersReducedMotion } from './Reveal'
 
-/** Shared dark hero for inner pages, with a GSAP blur-in entrance. */
+/** Shared dark poster-style hero for inner pages. */
 export default function PageHero({
   crumb,
   eyebrow,
@@ -32,16 +32,12 @@ export default function PageHero({
   }, [])
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-ink pb-24 pt-36 text-white md:pb-32 md:pt-48">
-      {/* signature blueprint texture */}
-      <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_75%)]" />
-      <div className="grain pointer-events-none absolute inset-0 opacity-[0.04]" />
+    <section ref={ref} className="relative overflow-hidden bg-ink pb-20 pt-36 text-white md:pb-28 md:pt-44">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary opacity-20 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-coral opacity-15 blur-[100px]" />
+      <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
 
-      {/* glow shapes */}
-      <div className="accent-gradient animate-float-slow pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full opacity-15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#667eea] opacity-10 blur-3xl" />
-
-      <div className="relative mx-auto max-w-[1200px] px-6 md:px-10">
+      <div className="relative mx-auto max-w-[1300px] px-5 md:px-10">
         <div className="ph-item mb-8 flex items-center gap-2 text-sm text-white/50">
           <Link to="/" className="link-underline transition-colors hover:text-primary">
             Home
@@ -50,12 +46,12 @@ export default function PageHero({
           <span className="text-white/80">{crumb}</span>
         </div>
 
-        <p className="ph-item mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-          <span className="accent-gradient h-px w-10" />
+        <p className="ph-item mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">
+          <span className="h-px w-10 bg-primary" />
           {eyebrow}
         </p>
 
-        <h1 className="ph-item max-w-4xl text-[clamp(2.5rem,7vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight">
+        <h1 className="ph-item max-w-5xl font-display text-[clamp(2.8rem,9vw,7rem)] uppercase leading-[0.92] tracking-tight">
           {title}
         </h1>
 

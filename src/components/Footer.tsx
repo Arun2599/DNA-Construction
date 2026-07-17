@@ -30,10 +30,10 @@ export default function Footer() {
             <span key={half} className="flex items-center">
               {['BUILDING YOUR DREAM HOUSE', 'CONSTRUCTION', 'ARCHITECTURE', 'INTERIORS'].map((word) => (
                 <span key={word} className="flex items-center">
-                  <span className="font-display text-4xl italic text-white/10 transition-colors duration-500 hover:text-primary/40 md:text-7xl">
+                  <span className="font-display text-4xl uppercase text-white/10 transition-colors duration-500 hover:text-primary/40 md:text-7xl">
                     {word}
                   </span>
-                  <span className="accent-gradient mx-6 h-2.5 w-2.5 rounded-full opacity-40 md:mx-8 md:h-3 md:w-3" />
+                  <span className="mx-6 h-2.5 w-2.5 rounded-full bg-primary opacity-50 md:mx-8 md:h-3 md:w-3" />
                 </span>
               ))}
             </span>
@@ -54,8 +54,8 @@ export default function Footer() {
               <p className="text-sm text-white/50">&amp; Architects</p>
             </div>
           </div>
-          <p className="mt-6 font-display text-3xl italic text-white/80">
-            We build your <span className="gradient-text">dream house.</span>
+          <p className="mt-6 font-display text-3xl uppercase leading-none text-white/80">
+            We build your <span className="text-primary">dream house</span>
           </p>
         </div>
 
