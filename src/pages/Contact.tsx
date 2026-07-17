@@ -52,13 +52,13 @@ export default function Contact() {
           <div className="grid gap-6 md:grid-cols-3">
             {cards.map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
-                <div className="group flex h-full flex-col rounded-3xl border border-black/5 bg-white p-9 transition-all hover:-translate-y-2 hover:shadow-2xl">
-                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary-dark transition-all group-hover:rotate-6 group-hover:scale-110">
+                <div className="shine group flex h-full flex-col rounded-3xl border border-black/5 bg-white p-9 transition-all duration-500 hover:-translate-y-2 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/10">
+                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary-dark transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d={c.icon} />
                     </svg>
                   </span>
-                  <h3 className="text-xl font-bold">{c.title}</h3>
+                  <h3 className="text-xl font-bold transition-colors duration-300 group-hover:text-primary-dark">{c.title}</h3>
                   <p className="mb-6 mt-1 text-sm text-muted-2">{c.label}</p>
                   <div className="flex flex-col gap-2.5">
                     {c.links.map((l) => (
@@ -67,7 +67,7 @@ export default function Contact() {
                         href={l.href}
                         target={l.href.startsWith('http') ? '_blank' : undefined}
                         rel={l.href.startsWith('http') ? 'noreferrer' : undefined}
-                        className="break-words font-medium text-ink transition-colors hover:text-primary-dark"
+                        className="link-underline w-fit break-words font-medium text-ink transition-colors hover:text-primary-dark"
                       >
                         {l.text}
                       </a>
@@ -79,8 +79,10 @@ export default function Contact() {
           </div>
 
           <Reveal className="mt-14">
-            <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-ink p-10 text-white md:grid-cols-2 md:p-14">
-              <div>
+            <div className="relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] bg-ink p-10 text-white md:grid-cols-2 md:p-14">
+              <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+              <div className="accent-gradient animate-float-slow pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full opacity-20 blur-3xl" />
+              <div className="relative">
                 <h3 className="text-3xl font-extrabold tracking-tight md:text-4xl">
                   Need immediate <span className="font-display font-normal italic text-primary">assistance?</span>
                 </h3>

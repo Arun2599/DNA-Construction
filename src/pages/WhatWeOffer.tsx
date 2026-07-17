@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
+import Magnetic from '../components/Magnetic'
 
 const services = [
   {
@@ -63,7 +64,7 @@ export default function WhatWeOffer() {
 
       <section className="bg-mist py-24 md:py-32">
         <div className="mx-auto max-w-[1200px] px-6 md:px-10">
-          <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+          <Reveal stagger={0.1} className="mx-auto mb-14 max-w-2xl text-center">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-primary">What we offer</p>
             <h2 className="text-4xl font-extrabold tracking-tight md:text-6xl">
               Crafting spaces, <span className="font-display font-normal italic text-primary">elevating experiences</span>
@@ -77,8 +78,10 @@ export default function WhatWeOffer() {
             {services.map((s, i) => (
               <Reveal key={s.title} delay={(i % 3) * 0.1}>
                 <div
-                  className={`group relative flex h-full flex-col rounded-3xl border p-9 transition-all hover:-translate-y-2 hover:shadow-2xl ${
-                    s.featured ? 'border-primary/30 bg-gradient-to-b from-primary/5 to-white' : 'border-black/5 bg-white'
+                  className={`shine group relative flex h-full flex-col rounded-3xl border p-9 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 ${
+                    s.featured
+                      ? 'border-primary/30 bg-gradient-to-b from-primary/5 to-white'
+                      : 'border-black/5 bg-white hover:border-primary/20'
                   }`}
                 >
                   {s.featured && (
@@ -86,12 +89,12 @@ export default function WhatWeOffer() {
                       Most Popular
                     </span>
                   )}
-                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary-dark transition-transform group-hover:rotate-6 group-hover:scale-110">
+                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary-dark transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d={s.icon} />
                     </svg>
                   </span>
-                  <h3 className="mb-3 text-xl font-bold">{s.title}</h3>
+                  <h3 className="mb-3 text-xl font-bold transition-colors duration-300 group-hover:text-primary-dark">{s.title}</h3>
                   <p className="mb-7 flex-1 leading-relaxed text-muted-2">{s.desc}</p>
                   <ul className="flex flex-col gap-2.5 border-t border-black/5 pt-6">
                     {s.features.map((f) => (
@@ -108,22 +111,28 @@ export default function WhatWeOffer() {
             ))}
           </div>
 
-          <Reveal className="mt-20 overflow-hidden rounded-3xl bg-ink p-12 text-center text-white md:p-16">
-            <h3 className="text-3xl font-extrabold tracking-tight md:text-5xl">
-              Ready to start your <span className="font-display font-normal italic text-primary">project?</span>
-            </h3>
-            <p className="mx-auto mt-4 max-w-md leading-relaxed text-white/60">
-              Let's discuss how we can bring your vision to life with our comprehensive services.
-            </p>
-            <Link
-              to="/contact"
-              className="accent-gradient mt-8 inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink transition-transform hover:scale-105"
-            >
-              Get Started
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+          <Reveal className="relative mt-20 overflow-hidden rounded-[2.5rem] bg-ink p-12 text-center text-white md:p-16">
+            <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+            <div className="accent-gradient animate-float-slow pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-20 blur-3xl" />
+            <div className="relative">
+              <h3 className="text-[clamp(1.9rem,4vw,3rem)] font-extrabold tracking-tight">
+                Ready to start your <span className="font-display font-normal italic text-primary">project?</span>
+              </h3>
+              <p className="mx-auto mt-4 max-w-md leading-relaxed text-white/60">
+                Let's discuss how we can bring your vision to life with our comprehensive services.
+              </p>
+              <Magnetic className="mt-8">
+                <Link
+                  to="/contact"
+                  className="accent-gradient shine group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/40 active:scale-95"
+                >
+                  Get Started
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                    <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </Magnetic>
+            </div>
           </Reveal>
         </div>
       </section>

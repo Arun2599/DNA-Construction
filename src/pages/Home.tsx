@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Reveal from '../components/Reveal'
+import Reveal, { prefersReducedMotion } from '../components/Reveal'
+import Magnetic from '../components/Magnetic'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -21,11 +22,15 @@ function RotatingWord() {
   )
 }
 
-function Stat({ value, suffix, label, dark = true }: { value: number; suffix: string; label: string; dark?: boolean }) {
+function Stat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const ref = useRef<HTMLHeadingElement>(null)
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
+    if (prefersReducedMotion()) {
+      el.textContent = `${value}${suffix}`
+      return
+    }
     const obj = { v: 0 }
     const tween = gsap.to(obj, {
       v: value,
@@ -43,11 +48,11 @@ function Stat({ value, suffix, label, dark = true }: { value: number; suffix: st
     }
   }, [value, suffix])
   return (
-    <div>
-      <h3 ref={ref} className="gradient-text text-4xl font-extrabold md:text-5xl">
+    <div className="group transition-transform duration-300 hover:-translate-y-1">
+      <h3 ref={ref} className="gradient-text text-4xl font-extrabold tabular-nums md:text-5xl">
         0{suffix}
       </h3>
-      <p className={`mt-1 text-sm font-medium ${dark ? 'text-white/60' : 'text-muted-2'}`}>{label}</p>
+      <p className="mt-1 text-sm font-medium text-white/60 transition-colors duration-300 group-hover:text-white/90">{label}</p>
     </div>
   )
 }
@@ -82,43 +87,89 @@ const featuredProjects = [
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
+  const aboutImgRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
+    if (prefersReducedMotion()) return
     const ctx = gsap.context(() => {
+      // word-by-word headline reveal
       gsap
-        .timeline({ defaults: { ease: 'power3.out' } })
-        .fromTo('.hero-reveal', { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 1.2, delay: 0.1 })
+        .timeline({ defaults: { ease: 'power4.out' } })
+        .fromTo('.hero-word', { yPercent: 110 }, { yPercent: 0, duration: 1.1, stagger: 0.09, delay: 0.15 })
         .fromTo(
           '.blur-in',
           { autoAlpha: 0, y: 20, filter: 'blur(10px)' },
-          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: 0.12 },
-          '-=0.8',
+          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: 0.12, ease: 'power3.out' },
+          '-=0.7',
         )
+
+      // parallax layers while scrolling past the hero
+      gsap.to('.hero-bg', {
+        yPercent: 18,
+        ease: 'none',
+        scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+      })
+      gsap.to('.hero-orb', {
+        yPercent: -30,
+        ease: 'none',
+        scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+      })
     }, heroRef)
-    return () => ctx.revert()
+
+    // about image drifts slower than the page
+    const about = aboutImgRef.current
+    let aboutTween: gsap.core.Tween | undefined
+    if (about) {
+      aboutTween = gsap.fromTo(
+        about.querySelector('img'),
+        { yPercent: -8 },
+        { yPercent: 8, ease: 'none', scrollTrigger: { trigger: about, start: 'top bottom', end: 'bottom top', scrub: true } },
+      )
+    }
+    return () => {
+      ctx.revert()
+      aboutTween?.scrollTrigger?.kill()
+      aboutTween?.kill()
+    }
   }, [])
+
+  const heading = 'WE BUILD YOUR'.split(' ')
 
   return (
     <main>
       {/* ============ HERO ============ */}
       <section ref={heroRef} className="relative flex min-h-screen items-center overflow-hidden bg-ink text-white">
-        <img src="/images/home-hero.svg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <img
+          src="/images/home-hero.svg"
+          alt=""
+          className="hero-bg absolute inset-0 h-[115%] w-full object-cover opacity-40 will-change-transform"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/60 to-ink" />
-        <div className="accent-gradient animate-float-slow pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full opacity-15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-[#667eea] opacity-10 blur-3xl" />
+        <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_70%)]" />
+        <div className="grain pointer-events-none absolute inset-0 opacity-[0.05]" />
+        <div className="hero-orb accent-gradient animate-float-slow pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full opacity-15 blur-3xl" />
+        <div className="hero-orb pointer-events-none absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-[#667eea] opacity-10 blur-3xl" />
 
-        <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 pb-28 pt-40 md:px-10">
-          <p className="blur-in mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-primary backdrop-blur-md">
+        <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 pb-28 pt-36 md:px-10 md:pt-40">
+          <p className="blur-in mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary backdrop-blur-md md:text-xs">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
             Premium Construction &amp; Design
           </p>
 
-          <h1 className="hero-reveal text-6xl font-extrabold leading-[0.95] tracking-tight md:text-8xl lg:text-9xl">
-            WE BUILD YOUR
+          <h1 className="text-[clamp(2.9rem,9vw,8.5rem)] font-extrabold leading-[0.95] tracking-tight">
+            {heading.map((w) => (
+              <span key={w} className="inline-block overflow-hidden pb-1 align-top">
+                <span className="hero-word inline-block will-change-transform">{w}&nbsp;</span>
+              </span>
+            ))}
             <br />
-            <span className="gradient-text font-display font-normal italic">dream house</span>
+            <span className="inline-block overflow-hidden pb-2 align-top">
+              <span className="hero-word gradient-text inline-block font-display font-normal italic will-change-transform">
+                dream house
+              </span>
+            </span>
           </h1>
 
           <p className="blur-in mt-8 text-lg text-white/70 md:text-xl">
@@ -131,28 +182,32 @@ export default function Home() {
           </p>
 
           <div className="blur-in mt-10 flex flex-wrap gap-4">
-            <Link
-              to="/projects"
-              className="accent-gradient group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink transition-transform hover:scale-105"
-            >
-              Start Exploring
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
-                <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold backdrop-blur-md transition-all hover:border-primary hover:text-primary"
-            >
-              Reach out
-            </Link>
+            <Magnetic>
+              <Link
+                to="/projects"
+                className="accent-gradient shine group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/40 active:scale-95"
+              >
+                Start Exploring
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold backdrop-blur-md transition-all duration-300 hover:border-primary hover:bg-primary/10 hover:text-primary active:scale-95"
+              >
+                Reach out
+              </Link>
+            </Magnetic>
           </div>
 
           <div className="blur-in mt-16 flex flex-wrap items-center gap-8 md:gap-12">
             <Stat value={20} suffix="+" label="Projects Completed" />
-            <span className="hidden h-12 w-px bg-white/10 md:block" />
+            <span className="hidden h-12 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent md:block" />
             <Stat value={3} suffix="+" label="Years Experience" />
-            <span className="hidden h-12 w-px bg-white/10 md:block" />
+            <span className="hidden h-12 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent md:block" />
             <Stat value={100} suffix="%" label="Client Satisfaction" />
           </div>
         </div>
@@ -170,12 +225,12 @@ export default function Home() {
       <section className="bg-white py-24 md:py-32">
         <div className="mx-auto grid max-w-[1200px] items-center gap-16 px-6 md:px-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
-            <Reveal>
+            <Reveal stagger={0.12}>
               <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary">
                 <span className="accent-gradient h-px w-10" />
                 About us
               </p>
-              <h2 className="text-4xl font-extrabold tracking-tight md:text-6xl">
+              <h2 className="text-[clamp(2.2rem,5vw,3.75rem)] font-extrabold leading-[1.08] tracking-tight">
                 Building dreams,
                 <br />
                 <span className="font-display font-normal italic text-primary">shaping futures</span>
@@ -187,7 +242,7 @@ export default function Home() {
               </p>
             </Reveal>
 
-            <div className="mt-10 flex flex-col gap-4">
+            <Reveal stagger={0.12} className="mt-10 flex flex-col gap-4">
               {[
                 {
                   h: 'Vision',
@@ -201,27 +256,43 @@ export default function Home() {
                   h: 'Goals',
                   p: 'Quality and excellence in every project — delivered on time, on budget, and beyond expectations.',
                 },
-              ].map((item, i) => (
-                <Reveal key={item.h} delay={i * 0.1}>
-                  <div className="group rounded-3xl border border-primary/10 bg-mist p-7 transition-all hover:translate-x-2 hover:border-primary/30 hover:shadow-xl">
-                    <h3 className="mb-2 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em]">
-                      {item.h}
-                      <span className="accent-gradient h-0.5 w-8" />
-                    </h3>
-                    <p className="leading-relaxed text-muted-2">{item.p}</p>
-                  </div>
-                </Reveal>
+              ].map((item) => (
+                <div
+                  key={item.h}
+                  className="group relative overflow-hidden rounded-3xl border border-primary/10 bg-mist p-7 transition-all duration-500 hover:translate-x-2 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10"
+                >
+                  <span className="accent-gradient absolute left-0 top-0 h-full w-1 origin-top scale-y-0 transition-transform duration-500 group-hover:scale-y-100" />
+                  <h3 className="mb-2 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em]">
+                    {item.h}
+                    <span className="accent-gradient h-0.5 w-8 transition-all duration-500 group-hover:w-14" />
+                  </h3>
+                  <p className="leading-relaxed text-muted-2">{item.p}</p>
+                </div>
               ))}
-            </div>
+            </Reveal>
           </div>
 
-          <Reveal delay={0.2} className="group relative overflow-hidden rounded-3xl">
-            <img
-              src="/images/about-sub.svg"
-              alt="About DNA Constructions"
-              className="h-[420px] w-full rounded-3xl object-cover transition-transform duration-700 group-hover:scale-105 lg:h-[560px]"
-            />
-            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-black/10" />
+          <Reveal delay={0.2}>
+            <div ref={aboutImgRef} className="group relative overflow-hidden rounded-3xl">
+              <img
+                src="/images/about-sub.svg"
+                alt="About DNA Constructions"
+                className="h-[420px] w-full scale-110 rounded-3xl object-cover will-change-transform lg:h-[560px]"
+              />
+              <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-black/10" />
+              {/* floating glass badge */}
+              <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-2xl border border-white/30 bg-white/70 px-5 py-3.5 shadow-xl backdrop-blur-xl transition-transform duration-500 group-hover:-translate-y-1">
+                <span className="accent-gradient grid h-10 w-10 place-items-center rounded-xl text-ink">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <div className="leading-tight">
+                  <p className="font-extrabold">20+ Projects</p>
+                  <p className="text-xs text-muted-2">Successfully completed</p>
+                </div>
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -229,9 +300,9 @@ export default function Home() {
       {/* ============ SERVICES PREVIEW ============ */}
       <section className="bg-mist py-24 md:py-32">
         <div className="mx-auto max-w-[1200px] px-6 md:px-10">
-          <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+          <Reveal stagger={0.1} className="mx-auto mb-14 max-w-2xl text-center">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-primary">What we offer</p>
-            <h2 className="text-4xl font-extrabold tracking-tight md:text-6xl">
+            <h2 className="text-[clamp(2.2rem,5vw,3.75rem)] font-extrabold leading-[1.08] tracking-tight">
               Crafting spaces, <span className="font-display font-normal italic text-primary">elevating experiences</span>
             </h2>
             <p className="mt-5 leading-relaxed text-muted-2">
@@ -243,8 +314,10 @@ export default function Home() {
             {services.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.1}>
                 <div
-                  className={`group relative flex h-full flex-col rounded-3xl border p-9 transition-all hover:-translate-y-2 hover:shadow-2xl ${
-                    s.featured ? 'border-primary/30 bg-gradient-to-b from-primary/5 to-white' : 'border-black/5 bg-white'
+                  className={`shine group relative flex h-full flex-col rounded-3xl border p-9 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 ${
+                    s.featured
+                      ? 'border-primary/30 bg-gradient-to-b from-primary/5 to-white'
+                      : 'border-black/5 bg-white hover:border-primary/20'
                   }`}
                 >
                   {s.featured && (
@@ -252,14 +325,16 @@ export default function Home() {
                       Popular
                     </span>
                   )}
-                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 transition-transform group-hover:rotate-6 group-hover:scale-110">
+                  <span className="mb-7 grid h-16 w-16 place-items-center rounded-2xl border border-primary/20 bg-primary/10 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20">
                     <img src={s.icon} alt="" className="h-9 w-9" />
                   </span>
-                  <h3 className="mb-3 text-xl font-bold">{s.title}</h3>
+                  <h3 className="mb-3 text-xl font-bold transition-colors duration-300 group-hover:text-primary-dark">
+                    {s.title}
+                  </h3>
                   <p className="mb-8 flex-1 leading-relaxed text-muted-2">{s.desc}</p>
                   <Link
                     to="/what-we-offer"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary-dark transition-all group-hover:gap-3"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary-dark transition-all duration-300 group-hover:gap-3"
                   >
                     Learn more
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -282,19 +357,21 @@ export default function Home() {
                 <span className="accent-gradient h-px w-10" />
                 Our work
               </p>
-              <h2 className="text-4xl font-extrabold tracking-tight md:text-6xl">
+              <h2 className="text-[clamp(2.2rem,5vw,3.75rem)] font-extrabold leading-[1.08] tracking-tight">
                 Featured <span className="font-display font-normal italic text-primary">projects</span>
               </h2>
             </div>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-sm font-semibold transition-all hover:border-primary hover:text-primary-dark"
-            >
-              View all work
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+            <Magnetic>
+              <Link
+                to="/projects"
+                className="group inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-sm font-semibold transition-all duration-300 hover:border-primary hover:text-primary-dark hover:shadow-lg hover:shadow-primary/10"
+              >
+                View all work
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </Magnetic>
           </Reveal>
 
           <div className="grid gap-6 md:grid-cols-12">
@@ -304,10 +381,10 @@ export default function Home() {
                   <img
                     src={p.img}
                     alt={p.title}
-                    className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-ink/60 opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
-                    <span className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink">
+                    <span className="translate-y-3 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink shadow-xl transition-transform duration-500 group-hover:translate-y-0">
                       View — <span className="font-display italic">{p.title}</span>
                     </span>
                   </div>
@@ -323,51 +400,63 @@ export default function Home() {
       </section>
 
       {/* ============ TESTIMONIAL ============ */}
-      <section className="bg-ink py-24 text-white md:py-32">
-        <div className="mx-auto max-w-4xl px-6 text-center md:px-10">
-          <Reveal>
-            <span className="font-display text-7xl italic text-primary/40">❝</span>
-            <p className="font-display text-2xl italic leading-relaxed text-white/85 md:text-4xl">
+      <section className="relative overflow-hidden bg-ink py-24 text-white md:py-32">
+        <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
+        <div className="grain pointer-events-none absolute inset-0 opacity-[0.04]" />
+        <div className="relative mx-auto max-w-4xl px-6 text-center md:px-10">
+          <Reveal stagger={0.15} blur>
+            <span className="font-display block text-7xl italic leading-none text-primary/40">❝</span>
+            <p className="mt-4 font-display text-2xl italic leading-relaxed text-white/85 md:text-4xl">
               They make it so easy to help you build your dream home! The kind of personal comfort and relationship they
               share with their customers makes the most tedious journey of building one's home the most joyful and happy
               experience.
             </p>
-            <p className="mt-8 text-sm font-bold uppercase tracking-[0.2em] text-primary">Mr. Arunkumar</p>
-            <p className="mt-1 text-sm text-white/50">Chennai</p>
+            <div className="mt-8">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">Mr. Arunkumar</p>
+              <p className="mt-1 text-sm text-white/50">Chennai</p>
+            </div>
           </Reveal>
         </div>
       </section>
 
       {/* ============ CONTACT CTA ============ */}
-      <section className="bg-white py-24 md:py-32">
-        <div className="mx-auto max-w-[1200px] px-6 text-center md:px-10">
-          <Reveal>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-primary">Contact us</p>
-            <h2 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-              Have a project <span className="font-display font-normal italic text-primary">in mind?</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted-2">
-              You can contact us if you have any query — we'd love to talk about your next build.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                to="/contact"
-                className="accent-gradient inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink transition-transform hover:scale-105"
-              >
-                Get in touch
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <a
-                href="tel:+917305693530"
-                className="inline-flex items-center gap-2 rounded-full border border-black/10 px-8 py-4 text-sm font-semibold transition-all hover:border-primary hover:text-primary-dark"
-              >
-                +91 73056 93530
-              </a>
+      <section className="bg-white px-4 py-24 md:py-32">
+        <Reveal className="mx-auto max-w-[1200px]">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-20 text-center text-white md:px-10 md:py-28">
+            <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+            <div className="accent-gradient animate-float-slow pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-20 blur-3xl" />
+            <div className="relative">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-primary">Contact us</p>
+              <h2 className="text-[clamp(2.2rem,5vw,3.75rem)] font-extrabold leading-[1.08] tracking-tight">
+                Have a project <span className="font-display font-normal italic text-primary">in mind?</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-md leading-relaxed text-white/60">
+                You can contact us if you have any query — we'd love to talk about your next build.
+              </p>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                <Magnetic>
+                  <Link
+                    to="/contact"
+                    className="accent-gradient shine group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-ink shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/40 active:scale-95"
+                  >
+                    Get in touch
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                      <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href="tel:+917305693530"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold backdrop-blur-md transition-all duration-300 hover:border-primary hover:text-primary active:scale-95"
+                  >
+                    +91 73056 93530
+                  </a>
+                </Magnetic>
+              </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </section>
     </main>
   )

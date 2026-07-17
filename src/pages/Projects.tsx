@@ -44,10 +44,10 @@ export default function Projects() {
               <button
                 key={c}
                 onClick={() => setFilter(c)}
-                className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition-all ${
+                className={`rounded-full px-6 py-2.5 text-sm font-semibold capitalize transition-all duration-300 active:scale-95 ${
                   filter === c
-                    ? 'accent-gradient text-ink shadow-lg shadow-primary/30'
-                    : 'border border-black/10 bg-white text-muted-2 hover:border-primary hover:text-primary-dark'
+                    ? 'accent-gradient scale-105 text-ink shadow-lg shadow-primary/30'
+                    : 'border border-black/10 bg-white text-muted-2 hover:-translate-y-0.5 hover:border-primary hover:text-primary-dark hover:shadow-md'
                 }`}
               >
                 {c === 'all' ? 'All Works' : c}
@@ -55,10 +55,10 @@ export default function Projects() {
             ))}
           </Reveal>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div key={filter} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((p, i) => (
-              <Reveal key={p.title} delay={(i % 3) * 0.08}>
-                <div className="group relative overflow-hidden rounded-3xl border border-black/5 bg-white">
+              <Reveal key={p.title} delay={(i % 3) * 0.08} y={30}>
+                <div className="shine group relative overflow-hidden rounded-3xl border border-black/5 bg-white transition-all duration-500 hover:-translate-y-2 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/10">
                   <img
                     src={p.img}
                     alt={p.title}
