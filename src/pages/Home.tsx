@@ -77,31 +77,117 @@ const services = [
     title: 'Construction',
     desc: 'End-to-end construction from planning to completion — highest quality builds, on time and within budget.',
     tags: ['Quality Assurance', 'On-Time Delivery', 'Budget Control'],
-    bg: 'bg-primary',
+    bg: 'bg-ink',
+    dark: true,
     tilt: -2,
   },
   {
     title: '3D & 2D Drawings',
     desc: 'Detailed architectural drawings that let you walk through your project before a single brick is laid.',
     tags: ['3D Visualization', 'Floor Plans', 'Accurate Measurements'],
-    bg: 'bg-sun',
+    bg: 'bg-primary',
+    dark: false,
     tilt: 1.5,
   },
   {
     title: 'Interior Design',
     desc: 'Stunning, functional interiors that reflect your style — from layout planning to materials and finishes.',
     tags: ['Custom Design', 'Material Selection', 'Space Optimization'],
-    bg: 'bg-coral',
+    bg: 'bg-sun',
+    dark: false,
     tilt: -1,
   },
 ]
 
 const featuredProjects = [
-  { title: 'Edakuppam Residential', tag: 'Interior · Construction', img: '/images/project.jpg', span: 'md:col-span-7', sticker: 'bg-sun' },
-  { title: 'Commercial Complex', tag: 'Architecture · Construction', img: '/images/we-offer.jpg', span: 'md:col-span-5', sticker: 'bg-leaf' },
-  { title: 'Modern Office Space', tag: 'Interior · Renovation', img: '/images/home-sub.svg', span: 'md:col-span-5', sticker: 'bg-rose' },
-  { title: 'Luxury Residence', tag: 'Architecture · Interior', img: '/images/home-hero.svg', span: 'md:col-span-7', sticker: 'bg-sky' },
+  { title: 'Edakuppam Residential', tag: 'Interior · Construction', img: '/images/project.jpg', span: 'md:col-span-7' },
+  { title: 'Commercial Complex', tag: 'Architecture · Construction', img: '/images/we-offer.jpg', span: 'md:col-span-5' },
+  { title: 'Modern Office Space', tag: 'Interior · Renovation', img: '/images/home-sub.svg', span: 'md:col-span-5' },
+  { title: 'Luxury Residence', tag: 'Architecture · Interior', img: '/images/home-hero.svg', span: 'md:col-span-7' },
 ]
+
+/* ponytail: placeholder reviews around the one real quote — swap in real client
+   reviews (and photos) when the client shares them. */
+const testimonials = [
+  {
+    quote:
+      'They make it so easy to help you build your dream home! The personal comfort and relationship they share with their customers makes building a home a joyful experience.',
+    name: 'Mr. Arunkumar',
+    place: 'Chennai',
+    bg: 'bg-white',
+    tilt: -1,
+  },
+  {
+    quote:
+      'From the first drawing to the final handover, everything was on schedule. The 3D plans helped us see our house before it existed.',
+    name: 'Mr. Dhanush',
+    place: 'Neyveli',
+    bg: 'bg-sun',
+    tilt: 1.5,
+  },
+  {
+    quote:
+      'The interior work exceeded our expectations. Every material was chosen with care and the finish is flawless.',
+    name: 'Mrs. Priya',
+    place: 'Cuddalore',
+    bg: 'bg-white',
+    tilt: -1.5,
+  },
+  {
+    quote:
+      'Transparent budgeting, quality materials, and a team that actually listens. Our renovation felt effortless.',
+    name: 'Mr. Karthik',
+    place: 'Chennai',
+    bg: 'bg-primary',
+    tilt: 1,
+  },
+]
+
+function TestimonialMarquee() {
+  const track = useRef<HTMLDivElement>(null)
+  const tweenRef = useRef<gsap.core.Tween | null>(null)
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return
+    tweenRef.current = gsap.to(track.current, { xPercent: -50, duration: 45, ease: 'none', repeat: -1 })
+    return () => {
+      tweenRef.current?.kill()
+    }
+  }, [])
+
+  const slow = () => tweenRef.current && gsap.to(tweenRef.current, { timeScale: 0.15, duration: 0.5 })
+  const resume = () => tweenRef.current && gsap.to(tweenRef.current, { timeScale: 1, duration: 0.5 })
+
+  return (
+    <div className="overflow-hidden" onMouseEnter={slow} onMouseLeave={resume}>
+      <div ref={track} className="flex w-max gap-7 py-6 pr-7 will-change-transform">
+        {[0, 1].map((half) => (
+          <div key={half} className="flex shrink-0 gap-7">
+            {testimonials.map((t) => (
+              <figure
+                key={`${half}-${t.name}`}
+                className={`${t.bg} w-[320px] rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
+                style={{ rotate: `${t.tilt}deg` }}
+              >
+                <span className="font-display text-5xl leading-none text-ink/20">❝</span>
+                <blockquote className="mt-3 font-medium leading-relaxed text-ink/85">{t.quote}</blockquote>
+                <figcaption className="mt-6 flex items-center gap-3">
+                  <span className="grid h-11 w-11 place-items-center rounded-full bg-ink font-display text-white">
+                    {t.name.split(' ')[1]?.[0] ?? t.name[0]}
+                  </span>
+                  <div>
+                    <p className="font-display text-lg uppercase leading-none">{t.name}</p>
+                    <p className="mt-1 text-xs font-bold uppercase tracking-wide text-ink/50">{t.place}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
@@ -134,7 +220,7 @@ export default function Home() {
 
   return (
     <main>
-      {/* ============ HERO — poster style ============ */}
+      {/* ============ HERO ============ */}
       <section ref={heroRef} className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-ink text-white">
         <img
           src="/images/home-hero.svg"
@@ -143,8 +229,7 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/50 to-ink" />
         <div className="hero-orb pointer-events-none absolute -left-32 top-1/4 h-[420px] w-[420px] rounded-full bg-primary opacity-25 blur-[100px]" />
-        <div className="hero-orb pointer-events-none absolute -right-24 top-10 h-96 w-96 rounded-full bg-coral opacity-20 blur-[100px]" />
-        <div className="hero-orb pointer-events-none absolute bottom-0 left-1/2 h-80 w-80 rounded-full bg-sun opacity-15 blur-[100px]" />
+        <div className="hero-orb pointer-events-none absolute -right-24 top-10 h-96 w-96 rounded-full bg-sun opacity-15 blur-[100px]" />
         <div className="grain pointer-events-none absolute inset-0 z-10 opacity-[0.35] mix-blend-overlay" />
 
         <div className="relative z-20 mx-auto w-full max-w-[1300px] px-5 pb-24 pt-36 md:px-10 md:pt-40">
@@ -198,16 +283,14 @@ export default function Home() {
               </div>
             </div>
 
-            {/* tilted stat stickers */}
             <div className="blur-in flex flex-wrap gap-4 md:gap-5">
-              <StatCard value={20} suffix="+" label="Projects Done" bg="bg-coral" tilt={-3} />
-              <StatCard value={3} suffix="+" label="Years Experience" bg="bg-leaf" tilt={2} />
+              <StatCard value={20} suffix="+" label="Projects Done" bg="bg-primary" tilt={-3} />
+              <StatCard value={3} suffix="+" label="Years Experience" bg="bg-white" tilt={2} />
               <StatCard value={100} suffix="%" label="Happy Clients" bg="bg-sun" tilt={-2} />
             </div>
           </div>
         </div>
 
-        {/* giant call link, bottom right */}
         <a
           href="tel:+917305693530"
           className="blur-in group absolute bottom-6 right-5 z-20 hidden items-center gap-2 font-display text-[clamp(1.4rem,3.5vw,3rem)] uppercase leading-none text-white/90 transition-colors duration-300 hover:text-primary lg:flex"
@@ -228,29 +311,39 @@ export default function Home() {
       {/* ============ ABOUT ============ */}
       <section className="overflow-hidden bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
-          <Reveal stagger={0.1}>
-            <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
-              <span className="h-px w-10 bg-primary" />
-              About us
-            </p>
-            <h2 className="max-w-4xl font-display text-[clamp(2.6rem,7vw,5.5rem)] uppercase leading-[0.92] tracking-tight">
-              Building dreams, <span className="text-primary">shaping</span> futures
-            </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-2">
-              At DNA Constructions and Architecture, we don't just build structures — we create living spaces that
-              reflect your vision. With expertise in both construction and design, we handle projects of all sizes,
-              ensuring quality and excellence from start to finish.
-            </p>
-          </Reveal>
+          <div className="grid items-start gap-12 lg:grid-cols-2">
+            <Reveal stagger={0.1}>
+              <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
+                <span className="h-px w-10 bg-primary" />
+                About us
+              </p>
+              <h2 className="font-display text-[clamp(2.6rem,7vw,5rem)] uppercase leading-[0.92] tracking-tight">
+                Building dreams,
+                <br />
+                <span className="text-primary">shaping</span> futures
+              </h2>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-2">
+                At DNA Constructions and Architecture, we don't just build structures — we create living spaces that
+                reflect your vision. With expertise in both construction and design, we handle projects of all sizes,
+                ensuring quality and excellence from start to finish.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {['Residential', 'Commercial', 'Architecture', 'Interiors', 'Renovation'].map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border-2 border-ink/10 bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-ink/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:text-primary-dark"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
 
-          <div className="mt-16 grid items-center gap-14 lg:grid-cols-[1fr_1.1fr]">
-            <Reveal delay={0.15}>
-              <div className="group relative mx-auto w-fit">
+              <div className="group relative mt-12 w-fit">
                 <div className="absolute -inset-3 rotate-[-2deg] rounded-3xl bg-primary transition-transform duration-500 group-hover:rotate-0" />
                 <img
                   src="/images/about-sub.svg"
-                  alt="About DNA Constructions"
-                  className="relative h-[380px] w-full rotate-[1.5deg] rounded-2xl object-cover shadow-2xl transition-transform duration-500 group-hover:rotate-0 lg:h-[480px]"
+                  alt="DNA Constructions team at work"
+                  className="relative h-[320px] w-full rotate-[1.5deg] rounded-2xl object-cover shadow-2xl transition-transform duration-500 group-hover:rotate-0 md:h-[400px]"
                 />
                 <div className="absolute -bottom-5 -right-4 rotate-[3deg] rounded-2xl bg-sun px-5 py-3 font-display text-xl uppercase text-ink shadow-xl transition-transform duration-500 group-hover:rotate-0">
                   Since 2022
@@ -258,34 +351,43 @@ export default function Home() {
               </div>
             </Reveal>
 
-            <Reveal stagger={0.12} className="flex flex-col gap-6">
+            <Reveal stagger={0.12} className="flex flex-col gap-6 lg:pt-24">
               {[
                 {
+                  n: '01',
                   h: 'Vision',
                   p: 'Ingenious solutions in the green energy domain — fine-tuning the balance between cost optimization and energy conservation.',
-                  bg: 'bg-sky',
+                  bg: 'bg-ink',
+                  dark: true,
                   tilt: -1.5,
                 },
                 {
+                  n: '02',
                   h: 'Mission',
                   p: 'We embrace technologies for a brighter future, delivering solutions that empower and transform lives through sustainability and excellence.',
-                  bg: 'bg-leaf',
+                  bg: 'bg-primary',
+                  dark: false,
                   tilt: 1.5,
                 },
                 {
+                  n: '03',
                   h: 'Goals',
                   p: 'Quality and excellence in every project — delivered on time, on budget, and beyond expectations.',
-                  bg: 'bg-coral',
+                  bg: 'bg-sun',
+                  dark: false,
                   tilt: -1,
                 },
               ].map((item) => (
                 <div
                   key={item.h}
-                  className={`${item.bg} rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:p-8`}
+                  className={`${item.bg} ${item.dark ? 'text-white' : 'text-ink'} rounded-3xl p-7 shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:p-8`}
                   style={{ rotate: `${item.tilt}deg` }}
                 >
-                  <h3 className="mb-2 font-display text-2xl uppercase tracking-wide">{item.h}</h3>
-                  <p className="font-medium leading-relaxed text-ink/75">{item.p}</p>
+                  <div className="flex items-baseline justify-between">
+                    <h3 className="font-display text-2xl uppercase tracking-wide">{item.h}</h3>
+                    <span className={`font-display text-lg ${item.dark ? 'text-white/25' : 'text-ink/25'}`}>{item.n}</span>
+                  </div>
+                  <p className={`mt-3 font-medium leading-relaxed ${item.dark ? 'text-white/70' : 'text-ink/75'}`}>{item.p}</p>
                 </div>
               ))}
             </Reveal>
@@ -310,21 +412,28 @@ export default function Home() {
             {services.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.1}>
                 <div
-                  className={`${s.bg} group flex h-full flex-col rounded-3xl p-8 text-ink shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
+                  className={`${s.bg} ${s.dark ? 'text-white' : 'text-ink'} group flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
                   style={{ rotate: `${s.tilt}deg` }}
                 >
                   <h3 className="font-display text-3xl uppercase leading-none">{s.title}</h3>
-                  <p className="mt-4 flex-1 font-medium leading-relaxed text-ink/75">{s.desc}</p>
+                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${s.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
                   <div className="mt-6 flex flex-wrap gap-2">
                     {s.tags.map((t) => (
-                      <span key={t} className="rounded-full bg-ink/10 px-3.5 py-1.5 text-xs font-bold text-ink/80">
+                      <span
+                        key={t}
+                        className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
+                          s.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
+                        }`}
+                      >
                         {t}
                       </span>
                     ))}
                   </div>
                   <Link
                     to="/what-we-offer"
-                    className="mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-ink px-6 py-3 text-xs font-bold uppercase tracking-wide text-white transition-all duration-300 group-hover:gap-3 hover:scale-105"
+                    className={`mt-7 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-wide transition-all duration-300 hover:scale-105 group-hover:gap-3 ${
+                      s.dark ? 'bg-primary text-ink' : 'bg-ink text-white'
+                    }`}
                   >
                     Learn more
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -375,9 +484,7 @@ export default function Home() {
                       className="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
-                  <span
-                    className={`${p.sticker} absolute left-5 top-5 rotate-[-3deg] rounded-full px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0`}
-                  >
+                  <span className="absolute left-5 top-5 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0">
                     {p.tag}
                   </span>
                   <div className="flex items-center justify-between p-6">
@@ -395,33 +502,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ TESTIMONIAL ============ */}
+      {/* ============ TESTIMONIALS ============ */}
       <section className="overflow-hidden bg-white py-24 text-ink md:py-32">
-        <div className="mx-auto max-w-4xl px-5 md:px-10">
-          <Reveal>
-            <div className="rotate-[-1.5deg] rounded-[2rem] bg-sun p-9 shadow-2xl transition-transform duration-500 hover:rotate-0 md:p-14">
-              <span className="font-display text-6xl leading-none text-ink/20">❝</span>
-              <p className="mt-2 text-xl font-semibold leading-relaxed md:text-2xl">
-                They make it so easy to help you build your dream home! The kind of personal comfort and relationship
-                they share with their customers makes the most tedious journey of building one's home the most joyful
-                and happy experience.
-              </p>
-              <div className="mt-8 flex items-center gap-4">
-                <span className="grid h-12 w-12 place-items-center rounded-full bg-ink font-display text-lg text-white">A</span>
-                <div>
-                  <p className="font-display text-xl uppercase leading-none">Mr. Arunkumar</p>
-                  <p className="mt-1 text-sm font-bold text-ink/60">Chennai</p>
-                </div>
-              </div>
-            </div>
+        <div className="mx-auto mb-4 max-w-[1300px] px-5 md:px-10">
+          <Reveal stagger={0.1}>
+            <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
+              <span className="h-px w-10 bg-primary" />
+              Testimonials
+            </p>
+            <h2 className="font-display text-[clamp(2.6rem,7vw,5.5rem)] uppercase leading-[0.92] tracking-tight">
+              Our clients <span className="text-primary">say</span>
+            </h2>
           </Reveal>
         </div>
+        <Reveal>
+          <TestimonialMarquee />
+        </Reveal>
       </section>
 
-      {/* ============ CTA — giant text link ============ */}
+      {/* ============ CTA ============ */}
       <section className="relative overflow-hidden bg-ink py-28 text-white md:py-36">
         <div className="pointer-events-none absolute -left-24 top-0 h-96 w-96 rounded-full bg-primary opacity-20 blur-[100px]" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-coral opacity-15 blur-[100px]" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-sun opacity-10 blur-[100px]" />
         <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
 
         <div className="relative mx-auto max-w-[1300px] px-5 text-center md:px-10">
@@ -457,7 +559,7 @@ export default function Home() {
               </a>
               <a
                 href="mailto:dnaconstructions@gmail.com"
-                className="rotate-[2deg] rounded-2xl bg-leaf px-7 py-4 font-display text-lg uppercase text-ink shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105"
+                className="rotate-[2deg] rounded-2xl bg-primary px-7 py-4 font-display text-lg uppercase text-ink shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105"
               >
                 Email us
               </a>

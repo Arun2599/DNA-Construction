@@ -6,6 +6,7 @@ const cards = [
     title: 'Call us',
     label: 'Direct contact numbers',
     bg: 'bg-sun',
+    dark: false,
     tilt: -2,
     links: [
       { href: 'tel:+917305693530', text: '+91 73056 93530' },
@@ -15,7 +16,8 @@ const cards = [
   {
     title: 'Email us',
     label: 'Drop a message anytime',
-    bg: 'bg-sky',
+    bg: 'bg-primary',
+    dark: false,
     tilt: 1.5,
     links: [
       { href: 'mailto:dnaconstructions@gmail.com', text: 'dnaconstructions@gmail.com' },
@@ -25,7 +27,8 @@ const cards = [
   {
     title: 'Visit us',
     label: 'Come say hello',
-    bg: 'bg-leaf',
+    bg: 'bg-ink',
+    dark: true,
     tilt: -1,
     links: [
       {
@@ -56,11 +59,11 @@ export default function Contact() {
             {cards.map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
                 <div
-                  className={`${c.bg} flex h-full flex-col rounded-3xl p-8 text-ink shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
+                  className={`${c.bg} ${c.dark ? 'text-white' : 'text-ink'} flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
                   style={{ rotate: `${c.tilt}deg` }}
                 >
                   <h3 className="font-display text-3xl uppercase leading-none">{c.title}</h3>
-                  <p className="mb-6 mt-2 text-sm font-bold text-ink/60">{c.label}</p>
+                  <p className={`mb-6 mt-2 text-sm font-bold ${c.dark ? 'text-white/60' : 'text-ink/60'}`}>{c.label}</p>
                   <div className="flex flex-col items-start gap-2.5">
                     {c.links.map((l) => (
                       <a
@@ -68,7 +71,9 @@ export default function Contact() {
                         href={l.href}
                         target={l.href.startsWith('http') ? '_blank' : undefined}
                         rel={l.href.startsWith('http') ? 'noreferrer' : undefined}
-                        className="link-underline break-words font-semibold text-ink/85 transition-colors hover:text-ink"
+                        className={`link-underline break-words font-semibold transition-colors ${
+                          c.dark ? 'text-white/85 hover:text-primary' : 'text-ink/85 hover:text-ink'
+                        }`}
                       >
                         {l.text}
                       </a>

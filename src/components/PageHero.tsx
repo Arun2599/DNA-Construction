@@ -34,7 +34,7 @@ export default function PageHero({
   return (
     <section ref={ref} className="relative overflow-hidden bg-ink pb-20 pt-36 text-white md:pb-28 md:pt-44">
       <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary opacity-20 blur-[100px]" />
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-coral opacity-15 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-sun opacity-10 blur-[100px]" />
       <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
 
       <div className="relative mx-auto max-w-[1300px] px-5 md:px-10">

@@ -4,8 +4,6 @@ import Reveal from '../components/Reveal'
 
 const categories = ['all', 'construction', 'architecture', 'building', 'renovation', 'interior'] as const
 
-const stickers = ['bg-sun', 'bg-leaf', 'bg-coral', 'bg-sky', 'bg-rose']
-
 /* ponytail: original project photos (project1–9.jpg) were never added to the repo,
    so cycle the four images that exist. Swap in real photos when available. */
 const imgs = ['/images/project.jpg', '/images/we-offer.jpg', '/images/home-sub.svg', '/images/home-hero.svg']
@@ -20,7 +18,7 @@ const projects = [
   { title: 'Modern House', desc: 'Construction work', category: 'construction' },
   { title: 'Commercial Complex', desc: 'Architecture design', category: 'architecture' },
   { title: 'Beach House', desc: 'Building work', category: 'building' },
-].map((p, i) => ({ ...p, img: imgs[i % imgs.length], sticker: stickers[i % stickers.length] }))
+].map((p, i) => ({ ...p, img: imgs[i % imgs.length] }))
 
 export default function Projects() {
   const [filter, setFilter] = useState<(typeof categories)[number]>('all')
@@ -70,7 +68,7 @@ export default function Projects() {
                     />
                   </div>
                   <span
-                    className={`${p.sticker} absolute left-5 top-5 rotate-[-3deg] rounded-full px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0`}
+                    className="absolute left-5 top-5 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0"
                   >
                     {p.category}
                   </span>

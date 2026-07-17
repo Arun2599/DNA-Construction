@@ -12,12 +12,8 @@ export default {
         night: '#0f1419',
         mist: '#f6f7f8',
         'muted-2': '#666666',
-        // poster card palette (from the studio's house style)
-        coral: '#F4845F',
-        leaf: '#6BBF7A',
+        // single warm accent: construction safety-amber
         sun: '#F5B841',
-        sky: '#6EB5FF',
-        rose: '#E882B4',
       },
       fontFamily: {
         body: ['Inter', 'system-ui', 'sans-serif'],
