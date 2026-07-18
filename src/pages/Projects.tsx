@@ -1,31 +1,18 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
+import { CATEGORIES, fallbackProjects, useList, type Project } from '../lib/content'
 
-const categories = ['all', 'construction', 'architecture', 'building', 'renovation', 'interior'] as const
-
-/* ponytail: original project photos (project1–9.jpg) were never added to the repo,
-   so cycle the four images that exist. Swap in real photos when available. */
-const imgs = ['/images/project.jpg', '/images/we-offer.jpg', '/images/home-sub.svg', '/images/home-hero.svg']
-
-const projects = [
-  { title: 'Modern Office Building', desc: 'Interior work', category: 'interior' },
-  { title: 'Luxury Apartment', desc: 'Construction work', category: 'construction' },
-  { title: 'Shopping Complex', desc: 'Architecture design', category: 'architecture' },
-  { title: 'Residential Villa', desc: 'Building work', category: 'building' },
-  { title: 'Heritage Building', desc: 'Renovation work', category: 'renovation' },
-  { title: 'Corporate Office', desc: 'Interior design', category: 'interior' },
-  { title: 'Modern House', desc: 'Construction work', category: 'construction' },
-  { title: 'Commercial Complex', desc: 'Architecture design', category: 'architecture' },
-  { title: 'Beach House', desc: 'Building work', category: 'building' },
-].map((p, i) => ({ ...p, img: imgs[i % imgs.length] }))
+const categories = ['all', ...CATEGORIES]
 
 export default function Projects() {
-  const [filter, setFilter] = useState<(typeof categories)[number]>('all')
+  const [filter, setFilter] = useState('all')
   const topRef = useRef<HTMLDivElement>(null)
+  const projects: Project[] = useList('projects', fallbackProjects)
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
 
-  const changeFilter = (c: (typeof categories)[number]) => {
+  const changeFilter = (c: string) => {
     setFilter(c)
     // jump back to the top of the results so the new list starts in view
     const marker = topRef.current
@@ -72,13 +59,16 @@ export default function Projects() {
           <div key={filter} className="grid gap-7 lg:grid-cols-12">
             {filtered.map((p, i) => (
               <Reveal
-                key={p.title}
+                key={p.id ?? p.title}
                 delay={(i % 2) * 0.08}
                 y={30}
                 className={[7, 5, 5, 7][i % 4] === 7 ? 'lg:col-span-7' : 'lg:col-span-5'}
                 stackTop={152 + (i % 5) * 10}
               >
-                <div className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]">
+                <Link
+                  to={`/projects/${p.id}`}
+                  className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]"
+                >
                   <img
                     src={p.img}
                     alt={p.title}
@@ -109,7 +99,7 @@ export default function Projects() {
                       {p.desc}
                     </p>
                   </div>
-                </div>
+                </Link>
               </Reveal>
             ))}
           </div>

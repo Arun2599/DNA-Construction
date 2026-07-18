@@ -2,59 +2,20 @@ import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
+import { fallbackServices, useList, type Service } from '../lib/content'
 
-const services = [
-  {
-    title: 'Construction',
-    desc: 'End-to-end construction solutions from planning to completion. Our experienced team delivers highest quality builds on time and within budget.',
-    tags: ['Quality Assurance', 'On-Time Delivery', 'Budget Management'],
-    bg: 'bg-ink',
-    dark: true,
-    tilt: -2,
-  },
-  {
-    title: '3D & 2D Drawings',
-    desc: 'Detailed architectural drawings that bring your vision to life — visualize your project before construction begins.',
-    tags: ['3D Visualization', 'Floor Plans', 'Accurate Measurements'],
-    bg: 'bg-primary',
-    dark: false,
-    tilt: 1.5,
-  },
-  {
-    title: 'Interior Design',
-    desc: 'Stunning, functional interiors that reflect your style. From layout planning to materials and finishes, we enhance every detail.',
-    tags: ['Custom Design', 'Material Selection', 'Space Optimization'],
-    bg: 'bg-sun',
-    dark: false,
-    tilt: -1,
-  },
-  {
-    title: 'Renovation',
-    desc: 'Transform existing spaces with our renovation expertise. We modernize and upgrade while preserving structural integrity and character.',
-    tags: ['Modern Upgrades', 'Structural Assessment', 'Value Enhancement'],
-    bg: 'bg-sun',
-    dark: false,
-    tilt: 2,
-  },
-  {
-    title: 'Consultation',
-    desc: 'Expert guidance from initial concept to final execution. We help you make informed decisions for successful project outcomes.',
-    tags: ['Expert Advice', 'Cost Estimation', 'Timeline Planning'],
-    bg: 'bg-ink',
-    dark: true,
-    tilt: -1.5,
-  },
-  {
-    title: 'Permits & Docs',
-    desc: 'Navigate complex regulatory requirements with ease. We handle all permits, approvals, and documentation for seamless execution.',
-    tags: ['Permit Processing', 'Legal Compliance', 'Documentation'],
-    bg: 'bg-primary',
-    dark: false,
-    tilt: 1,
-  },
+/* Content comes from Firestore (editable at /admin); the style cycle keeps the poster look. */
+const styles = [
+  { bg: 'bg-ink', dark: true, tilt: -2 },
+  { bg: 'bg-primary', dark: false, tilt: 1.5 },
+  { bg: 'bg-sun', dark: false, tilt: -1 },
+  { bg: 'bg-sun', dark: false, tilt: 2 },
+  { bg: 'bg-ink', dark: true, tilt: -1.5 },
+  { bg: 'bg-primary', dark: false, tilt: 1 },
 ]
 
 export default function WhatWeOffer() {
+  const services: Service[] = useList('services', fallbackServices)
   return (
     <main>
       <PageHero
@@ -71,21 +32,23 @@ export default function WhatWeOffer() {
       <section className="bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
           <div className="grid gap-7 lg:grid-cols-3">
-            {services.map((s, i) => (
-              <Reveal key={s.title} delay={(i % 3) * 0.1} stackTop={96 + (i % 6) * 8}>
+            {services.map((s, i) => {
+              const st = styles[i % styles.length]
+              return (
+              <Reveal key={s.id ?? s.title} delay={(i % 3) * 0.1} stackTop={96 + (i % 6) * 8}>
                 <div
-                  className={`${s.bg} ${s.dark ? 'text-white' : 'text-ink'} flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
-                  style={{ rotate: `${s.tilt}deg` }}
+                  className={`${st.bg} ${st.dark ? 'text-white' : 'text-ink'} flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
+                  style={{ rotate: `${st.tilt}deg` }}
                 >
-                  <span className={`font-display text-lg ${s.dark ? 'text-white/30' : 'text-ink/30'}`}>0{i + 1}</span>
+                  <span className={`font-display text-lg ${st.dark ? 'text-white/30' : 'text-ink/30'}`}>0{i + 1}</span>
                   <h3 className="mt-2 font-display text-3xl uppercase leading-none">{s.title}</h3>
-                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${s.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
+                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${st.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {s.tags.map((t) => (
+                    {s.tags.split(',').map((raw) => raw.trim()).filter(Boolean).map((t) => (
                       <span
                         key={t}
                         className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
-                          s.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
+                          st.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
                         }`}
                       >
                         {t}
@@ -94,7 +57,7 @@ export default function WhatWeOffer() {
                   </div>
                 </div>
               </Reveal>
-            ))}
+            )})}
           </div>
 
           {/* CTA */}

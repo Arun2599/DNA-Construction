@@ -2,8 +2,10 @@ import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { prefersReducedMotion } from './Reveal'
+import { telHref, useSettings } from '../lib/content'
 
 export default function Footer() {
+  const s = useSettings()
   const track = useRef<HTMLDivElement>(null)
   const tweenRef = useRef<gsap.core.Tween | null>(null)
 
@@ -78,19 +80,19 @@ export default function Footer() {
         <div>
           <h4 className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-white/40">Contact</h4>
           <div className="flex flex-col gap-3 text-white/70">
-            <a href="tel:+917305693530" className="link-underline w-fit transition-colors hover:text-primary">
-              +91 73056 93530
+            <a href={telHref(s.phone1)} className="link-underline w-fit transition-colors hover:text-primary">
+              {s.phone1}
             </a>
             <a
-              href="mailto:dnaconstructionsandarchitecture@gmail.com"
+              href={`mailto:${s.email1}`}
               className="link-underline w-fit break-all transition-colors hover:text-primary"
             >
-              dnaconstructionsandarchitecture@gmail.com
+              {s.email1}
             </a>
-            <p>No 6, Ambedkar Nagar, Neyveli, Cuddalore - 607804</p>
+            <p>{s.address}</p>
             <div className="mt-2 flex gap-3">
               <a
-                href="https://www.instagram.com"
+                href={s.instagram}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
@@ -103,7 +105,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.youtube.com"
+                href={s.youtube}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="YouTube"

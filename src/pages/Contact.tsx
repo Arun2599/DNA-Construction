@@ -1,45 +1,36 @@
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
-
-const cards = [
-  {
-    title: 'Call us',
-    label: 'Direct contact numbers',
-    bg: 'bg-sun',
-    dark: false,
-    tilt: -2,
-    links: [
-      { href: 'tel:+917305693530', text: '+91 73056 93530' },
-      { href: 'tel:+918220710738', text: '+91 82207 10738' },
-    ],
-  },
-  {
-    title: 'Email us',
-    label: 'Drop a message anytime',
-    bg: 'bg-primary',
-    dark: false,
-    tilt: 1.5,
-    links: [
-      { href: 'mailto:dnaconstructions@gmail.com', text: 'dnaconstructions@gmail.com' },
-      { href: 'mailto:dhanushguna@gmail.com', text: 'dhanushguna@gmail.com' },
-    ],
-  },
-  {
-    title: 'Visit us',
-    label: 'Come say hello',
-    bg: 'bg-ink',
-    dark: true,
-    tilt: -1,
-    links: [
-      {
-        href: 'https://maps.google.com/?q=Neyveli,Cuddalore',
-        text: 'No 8, Ambedkar Nagar, Neyveli, Cuddalore - 607804',
-      },
-    ],
-  },
-]
+import { telHref, useSettings } from '../lib/content'
 
 export default function Contact() {
+  const s = useSettings()
+
+  const cards = [
+    {
+      title: 'Call us',
+      label: 'Direct contact numbers',
+      bg: 'bg-sun',
+      dark: false,
+      tilt: -2,
+      links: [s.phone1, s.phone2].filter(Boolean).map((p) => ({ href: telHref(p), text: p })),
+    },
+    {
+      title: 'Email us',
+      label: 'Drop a message anytime',
+      bg: 'bg-primary',
+      dark: false,
+      tilt: 1.5,
+      links: [s.email1, s.email2].filter(Boolean).map((e) => ({ href: `mailto:${e}`, text: e })),
+    },
+    {
+      title: 'Visit us',
+      label: 'Come say hello',
+      bg: 'bg-ink',
+      dark: true,
+      tilt: -1,
+      links: [{ href: `https://maps.google.com/?q=${encodeURIComponent(s.address)}`, text: s.address }],
+    },
+  ]
   return (
     <main>
       <PageHero
@@ -100,13 +91,13 @@ export default function Contact() {
                     <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <p>
-                    <strong className="text-white">Mon – Sat:</strong> 9:00 AM – 6:00 PM
+                    <strong className="text-white">Mon – Sat:</strong> {s.hoursWeek}
                     <br />
-                    <strong className="text-white">Sunday:</strong> Closed
+                    <strong className="text-white">Sunday:</strong> {s.hoursSunday}
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/917305693530"
+                  href={s.whatsapp}
                   target="_blank"
                   rel="noreferrer"
                   className="mt-8 inline-flex rotate-[-2deg] items-center gap-2 rounded-2xl bg-[#25D366] px-7 py-4 font-display text-lg uppercase text-ink shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105"

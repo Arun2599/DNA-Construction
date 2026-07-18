@@ -4,6 +4,17 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Reveal, { prefersReducedMotion } from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
+import {
+  fallbackProjects,
+  fallbackServices,
+  fallbackTestimonials,
+  telHref,
+  useList,
+  useSettings,
+  type Project,
+  type Service,
+  type Testimonial,
+} from '../lib/content'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -72,78 +83,23 @@ function StatCard({
   )
 }
 
-const services = [
-  {
-    title: 'Construction',
-    desc: 'End-to-end construction from planning to completion — highest quality builds, on time and within budget.',
-    tags: ['Quality Assurance', 'On-Time Delivery', 'Budget Control'],
-    bg: 'bg-ink',
-    dark: true,
-    tilt: -2,
-  },
-  {
-    title: '3D & 2D Drawings',
-    desc: 'Detailed architectural drawings that let you walk through your project before a single brick is laid.',
-    tags: ['3D Visualization', 'Floor Plans', 'Accurate Measurements'],
-    bg: 'bg-primary',
-    dark: false,
-    tilt: 1.5,
-  },
-  {
-    title: 'Interior Design',
-    desc: 'Stunning, functional interiors that reflect your style — from layout planning to materials and finishes.',
-    tags: ['Custom Design', 'Material Selection', 'Space Optimization'],
-    bg: 'bg-sun',
-    dark: false,
-    tilt: -1,
-  },
+/* Content comes from Firestore (editable at /admin); these style cycles keep the poster look. */
+const serviceStyles = [
+  { bg: 'bg-ink', dark: true, tilt: -2 },
+  { bg: 'bg-primary', dark: false, tilt: 1.5 },
+  { bg: 'bg-sun', dark: false, tilt: -1 },
 ]
 
-const featuredProjects = [
-  { title: 'Edakuppam Residential', tag: 'Interior · Construction', img: '/images/project.jpg', span: 'lg:col-span-7' },
-  { title: 'Commercial Complex', tag: 'Architecture · Construction', img: '/images/we-offer.jpg', span: 'lg:col-span-5' },
-  { title: 'Modern Office Space', tag: 'Interior · Renovation', img: '/images/home-sub.svg', span: 'lg:col-span-5' },
-  { title: 'Luxury Residence', tag: 'Architecture · Interior', img: '/images/home-hero.svg', span: 'lg:col-span-7' },
+const projectSpans = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7']
+
+const testimonialStyles = [
+  { bg: 'bg-white', tilt: -1 },
+  { bg: 'bg-sun', tilt: 1.5 },
+  { bg: 'bg-white', tilt: -1.5 },
+  { bg: 'bg-primary', tilt: 1 },
 ]
 
-/* ponytail: placeholder reviews around the one real quote — swap in real client
-   reviews (and photos) when the client shares them. */
-const testimonials = [
-  {
-    quote:
-      'They make it so easy to help you build your dream home! The personal comfort and relationship they share with their customers makes building a home a joyful experience.',
-    name: 'Mr. Arunkumar',
-    place: 'Chennai',
-    bg: 'bg-white',
-    tilt: -1,
-  },
-  {
-    quote:
-      'From the first drawing to the final handover, everything was on schedule. The 3D plans helped us see our house before it existed.',
-    name: 'Mr. Dhanush',
-    place: 'Neyveli',
-    bg: 'bg-sun',
-    tilt: 1.5,
-  },
-  {
-    quote:
-      'The interior work exceeded our expectations. Every material was chosen with care and the finish is flawless.',
-    name: 'Mrs. Priya',
-    place: 'Cuddalore',
-    bg: 'bg-white',
-    tilt: -1.5,
-  },
-  {
-    quote:
-      'Transparent budgeting, quality materials, and a team that actually listens. Our renovation felt effortless.',
-    name: 'Mr. Karthik',
-    place: 'Chennai',
-    bg: 'bg-primary',
-    tilt: 1,
-  },
-]
-
-function TestimonialMarquee() {
+function TestimonialMarquee({ items }: { items: Testimonial[] }) {
   const track = useRef<HTMLDivElement>(null)
   const tweenRef = useRef<gsap.core.Tween | null>(null)
 
@@ -163,11 +119,11 @@ function TestimonialMarquee() {
       <div ref={track} className="flex w-max gap-7 py-6 pr-7 will-change-transform">
         {[0, 1].map((half) => (
           <div key={half} className="flex shrink-0 gap-7">
-            {testimonials.map((t) => (
+            {items.map((t, i) => (
               <figure
-                key={`${half}-${t.name}`}
-                className={`${t.bg} w-[320px] rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
-                style={{ rotate: `${t.tilt}deg` }}
+                key={`${half}-${t.id ?? t.name}`}
+                className={`${testimonialStyles[i % testimonialStyles.length].bg} w-[320px] rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
+                style={{ rotate: `${testimonialStyles[i % testimonialStyles.length].tilt}deg` }}
               >
                 <span className="font-display text-5xl leading-none text-ink/20">❝</span>
                 <blockquote className="mt-3 font-medium leading-relaxed text-ink/85">{t.quote}</blockquote>
@@ -191,6 +147,12 @@ function TestimonialMarquee() {
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
+  const settings = useSettings()
+  const services: Service[] = useList('services', fallbackServices).slice(0, 3)
+  const allProjects: Project[] = useList('projects', fallbackProjects)
+  const flagged = allProjects.filter((p) => p.featured)
+  const featuredProjects = (flagged.length ? flagged : allProjects).slice(0, 4)
+  const testimonials: Testimonial[] = useList('testimonials', fallbackTestimonials)
 
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
@@ -284,15 +246,15 @@ export default function Home() {
             </div>
 
             <div className="blur-in flex flex-wrap gap-4 md:gap-5">
-              <StatCard value={20} suffix="+" label="Projects Done" bg="bg-primary" tilt={-3} />
-              <StatCard value={3} suffix="+" label="Years Experience" bg="bg-white" tilt={2} />
-              <StatCard value={100} suffix="%" label="Happy Clients" bg="bg-sun" tilt={-2} />
+              <StatCard value={settings.statProjects} suffix="+" label="Projects Done" bg="bg-primary" tilt={-3} />
+              <StatCard value={settings.statYears} suffix="+" label="Years Experience" bg="bg-white" tilt={2} />
+              <StatCard value={settings.statClients} suffix="%" label="Happy Clients" bg="bg-sun" tilt={-2} />
             </div>
           </div>
         </div>
 
         <a
-          href="tel:+917305693530"
+          href={telHref(settings.phone1)}
           className="blur-in group absolute bottom-6 right-5 z-20 hidden items-center gap-2 font-display text-[clamp(1.4rem,3.5vw,3rem)] uppercase leading-none text-white/90 transition-colors duration-300 hover:text-primary lg:flex"
         >
           Call us
@@ -415,20 +377,22 @@ export default function Home() {
           </Reveal>
 
           <div className="grid gap-7 lg:grid-cols-3">
-            {services.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.1} stackTop={96 + i * 10}>
+            {services.map((s, i) => {
+              const st = serviceStyles[i % serviceStyles.length]
+              return (
+              <Reveal key={s.id ?? s.title} delay={i * 0.1} stackTop={96 + i * 10}>
                 <div
-                  className={`${s.bg} ${s.dark ? 'text-white' : 'text-ink'} group flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
-                  style={{ rotate: `${s.tilt}deg` }}
+                  className={`${st.bg} ${st.dark ? 'text-white' : 'text-ink'} group flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
+                  style={{ rotate: `${st.tilt}deg` }}
                 >
                   <h3 className="font-display text-3xl uppercase leading-none">{s.title}</h3>
-                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${s.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
+                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${st.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {s.tags.map((t) => (
+                    {s.tags.split(',').map((raw) => raw.trim()).filter(Boolean).map((t) => (
                       <span
                         key={t}
                         className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
-                          s.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
+                          st.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
                         }`}
                       >
                         {t}
@@ -438,7 +402,7 @@ export default function Home() {
                   <Link
                     to="/what-we-offer"
                     className={`mt-7 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-wide transition-all duration-300 hover:scale-105 group-hover:gap-3 ${
-                      s.dark ? 'bg-primary text-ink' : 'bg-ink text-white'
+                      st.dark ? 'bg-primary text-ink' : 'bg-ink text-white'
                     }`}
                   >
                     Learn more
@@ -448,7 +412,7 @@ export default function Home() {
                   </Link>
                 </div>
               </Reveal>
-            ))}
+            )})}
           </div>
         </div>
       </section>
@@ -481,9 +445,9 @@ export default function Home() {
 
           <div className="grid gap-7 lg:grid-cols-12">
             {featuredProjects.map((p, i) => (
-              <Reveal key={p.title} delay={(i % 2) * 0.1} className={p.span} stackTop={96 + (i % 4) * 10}>
+              <Reveal key={p.id ?? p.title} delay={(i % 2) * 0.1} className={projectSpans[i % projectSpans.length]} stackTop={96 + (i % 4) * 10}>
                 <Link
-                  to="/projects"
+                  to={p.id ? `/projects/${p.id}` : '/projects'}
                   className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[420px]"
                 >
                   <img
@@ -494,7 +458,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent transition-opacity duration-500 group-hover:from-ink/95" />
 
                   <span className="absolute left-5 top-5 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0">
-                    {p.tag}
+                    {p.category}
                   </span>
 
                   <span className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-500 group-hover:rotate-45 group-hover:opacity-100">
@@ -533,7 +497,7 @@ export default function Home() {
           </Reveal>
         </div>
         <Reveal>
-          <TestimonialMarquee />
+          <TestimonialMarquee items={testimonials} />
         </Reveal>
       </section>
 
@@ -569,13 +533,13 @@ export default function Home() {
             </Link>
             <div className="mt-12 flex flex-wrap items-center justify-center gap-5">
               <a
-                href="tel:+917305693530"
+                href={telHref(settings.phone1)}
                 className="rotate-[-2deg] rounded-2xl bg-sun px-7 py-4 font-display text-lg uppercase text-ink shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105"
               >
-                +91 73056 93530
+                {settings.phone1}
               </a>
               <a
-                href="mailto:dnaconstructions@gmail.com"
+                href={`mailto:${settings.email1}`}
                 className="rotate-[2deg] rounded-2xl bg-primary px-7 py-4 font-display text-lg uppercase text-ink shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105"
               >
                 Email us
