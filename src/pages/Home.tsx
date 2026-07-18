@@ -123,18 +123,20 @@ function TestimonialMarquee({ items }: { items: Testimonial[] }) {
             {items.map((t, i) => (
               <figure
                 key={`${half}-${t.id ?? t.name}`}
-                className={`${testimonialStyles[i % testimonialStyles.length].bg} w-[320px] rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
+                className={`${testimonialStyles[i % testimonialStyles.length].bg} flex w-[320px] flex-col rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
                 style={{ rotate: `${testimonialStyles[i % testimonialStyles.length].tilt}deg` }}
               >
                 <span className="font-display text-5xl leading-none text-ink/20">❝</span>
-                <blockquote className="mt-3 font-medium leading-relaxed text-ink/85">{t.quote}</blockquote>
-                <figcaption className="mt-6 flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-full bg-ink font-display text-white">
+                <blockquote className="mt-3 line-clamp-6 break-words font-medium leading-relaxed text-ink/85">
+                  {t.quote}
+                </blockquote>
+                <figcaption className="mt-auto flex items-center gap-3 pt-6">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink font-display text-white">
                     {t.name.split(' ')[1]?.[0] ?? t.name[0]}
                   </span>
-                  <div>
-                    <p className="font-display text-lg uppercase leading-none">{t.name}</p>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-wide text-ink/50">{t.place}</p>
+                  <div className="min-w-0">
+                    <p className="break-words font-display text-lg uppercase leading-none">{t.name}</p>
+                    <p className="mt-1 break-words text-xs font-bold uppercase tracking-wide text-ink/50">{t.place}</p>
                   </div>
                 </figcaption>
               </figure>

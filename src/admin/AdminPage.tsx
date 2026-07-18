@@ -22,6 +22,7 @@ type Field = {
   label: string
   type: 'text' | 'textarea' | 'number' | 'checkbox' | 'select' | 'image' | 'gallery'
   options?: string[]
+  maxLength?: number
 }
 
 const inputCls =
@@ -43,7 +44,21 @@ function FieldInput({
   const [uploading, setUploading] = useState(false)
 
   if (field.type === 'textarea')
-    return <textarea className={`${inputCls} min-h-24`} value={String(value ?? '')} onChange={(e) => onChange(e.target.value)} />
+    return (
+      <div>
+        <textarea
+          className={`${inputCls} min-h-24`}
+          maxLength={field.maxLength}
+          value={String(value ?? '')}
+          onChange={(e) => onChange(e.target.value)}
+        />
+        {field.maxLength && (
+          <span className="mt-1 block text-right text-[11px] font-bold text-ink/40">
+            {String(value ?? '').length}/{field.maxLength}
+          </span>
+        )}
+      </div>
+    )
 
   if (field.type === 'checkbox')
     return (
@@ -141,6 +156,7 @@ function FieldInput({
     <input
       type={field.type === 'number' ? 'number' : 'text'}
       className={inputCls}
+      maxLength={field.maxLength}
       value={String(value ?? '')}
       onChange={(e) => onChange(field.type === 'number' ? Number(e.target.value) : e.target.value)}
     />
@@ -589,10 +605,10 @@ export default function AdminPage() {
             rowTitle="name"
             rowSub="place"
             fields={[
-              { key: 'name', label: 'Client name', type: 'text' },
-              { key: 'place', label: 'Place', type: 'text' },
+              { key: 'name', label: 'Client name', type: 'text', maxLength: 40 },
+              { key: 'place', label: 'Place', type: 'text', maxLength: 30 },
               { key: 'order', label: 'Order', type: 'number' },
-              { key: 'quote', label: 'Review', type: 'textarea' },
+              { key: 'quote', label: 'Review (max 300 characters)', type: 'textarea', maxLength: 300 },
             ]}
           />
         )}
