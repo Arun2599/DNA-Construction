@@ -35,6 +35,26 @@
 }
 
 @layer utilities {
+  /* contact page map pin: gentle bob */
+  .map-pin {
+    animation: map-bob 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.3));
+  }
+  @keyframes map-bob {
+    0%,
+    100% {
+      transform: translate(-50%, -100%);
+    }
+    50% {
+      transform: translate(-50%, calc(-100% - 6px));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .map-pin {
+      animation: none;
+    }
+  }
+
   .accent-gradient {
     background: linear-gradient(90deg, #4cc9f0 0%, #26c9ff 100%);
   }

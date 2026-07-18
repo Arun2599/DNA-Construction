@@ -107,7 +107,65 @@ export default function Contact() {
               <img src="/images/we-offer.jpg" alt="DNA Constructions engineer reviewing plans on site" className="relative hidden h-80 w-full rounded-[2rem] object-cover shadow-2xl md:block" />
             </div>
           </Reveal>
+
         </div>
+      </section>
+
+      {/* ============ MAP — full-bleed, office pinned dead-center ============ */}
+      <section className="relative h-[70vh] overflow-hidden bg-mist md:h-[90vh]">
+        {/* the stitched map is positioned so the office (45.4% / 47.4% of the image)
+            always sits at the horizontal center of the viewport, uncropped math intact */}
+        <div
+          className="absolute top-1/2 aspect-[7/4] w-[max(100vw,160vh)]"
+          style={{ left: '50%', transform: 'translate(-45.4%, -50%)' }}
+        >
+          <img
+            src="/images/map-area.png"
+            alt="Map of the Neyveli region showing the DNA Constructions office"
+            className="h-full w-full saturate-[.65] contrast-[.95]"
+          />
+          <svg
+            className="map-pin absolute left-[45.4%] top-[47.4%] z-10 -translate-x-1/2 -translate-y-full"
+            width="40"
+            height="52"
+            viewBox="0 0 40 52"
+            fill="none"
+          >
+            <path
+              d="M20 1C9.5 1 1 9.5 1 20c0 13.5 19 31 19 31s19-17.5 19-31C39 9.5 30.5 1 20 1z"
+              fill="#F5B841"
+              stroke="#111111"
+              strokeWidth="2"
+            />
+            <circle cx="20" cy="20" r="7" fill="#111111" />
+          </svg>
+        </div>
+
+        {/* site-palette wash + grain so the map sits with the rest of the design */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-primary/10 mix-blend-multiply" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-mist to-transparent" />
+        <div className="grain pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" />
+
+        {/* label → thin line down to the pin (pin is always at horizontal center) */}
+        <div className="absolute left-1/2 top-0 flex h-[46%] -translate-x-1/2 flex-col items-center">
+          <p className="pt-10 text-center text-sm font-bold uppercase tracking-wide text-ink md:text-base">
+            DNA Constructions &amp; Architects
+            <span className="block text-xs font-semibold normal-case tracking-normal text-ink/50 md:text-sm">
+              Neyveli, Cuddalore
+            </span>
+          </p>
+          <span className="mt-3 w-px flex-1 bg-ink/30" />
+        </div>
+
+        <a
+          href={`https://maps.google.com/?q=${encodeURIComponent(s.address)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="absolute bottom-6 right-5 rotate-[2deg] rounded-2xl bg-ink px-6 py-3.5 shadow-xl transition-transform duration-300 hover:rotate-0 hover:scale-105 md:right-8"
+        >
+          <span className="font-display text-base uppercase leading-none text-sun">Get directions ↗</span>
+        </a>
+        <span className="absolute bottom-2 left-4 text-[9px] font-semibold text-ink/35">© OpenStreetMap © CARTO</span>
       </section>
     </main>
   )
