@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from 'firebase/firestore'
 import { auth, db, firebaseReady } from '../lib/firebase'
-import { CATEGORIES, fallbackSettings, uploadImage, type Settings } from '../lib/content'
+import { CATEGORIES, fallbackContent, fallbackSettings, uploadImage } from '../lib/content'
 
 type Row = Record<string, string | number | boolean | undefined> & { id?: string }
 
@@ -273,7 +273,11 @@ function CollectionEditor({
   )
 }
 
-const settingsFields: { key: keyof Settings; label: string; type?: 'number' }[] = [
+type DocField =
+  | { key: string; label: string; type?: 'number' | 'textarea' }
+  | { heading: string }
+
+const settingsFields: DocField[] = [
   { key: 'statProjects', label: 'Stat: projects done', type: 'number' },
   { key: 'statYears', label: 'Stat: years experience', type: 'number' },
   { key: 'statClients', label: 'Stat: happy clients %', type: 'number' },
@@ -289,24 +293,81 @@ const settingsFields: { key: keyof Settings; label: string; type?: 'number' }[] 
   { key: 'youtube', label: 'YouTube link' },
 ]
 
-function SettingsForm() {
-  const [values, setValues] = useState<Settings>(fallbackSettings)
+const contentFields: DocField[] = [
+  { heading: 'Home — hero' },
+  { key: 'heroBadge', label: 'Top badge' },
+  { key: 'heroTitle', label: 'Big headline', type: 'textarea' },
+  { key: 'rotatingWords', label: 'Rotating words (comma separated)' },
+  { key: 'taglinePrefix', label: 'Tagline before rotating word' },
+  { key: 'taglineSuffix', label: 'Tagline after rotating word' },
+  { key: 'heroDesc', label: 'Hero description', type: 'textarea' },
+  { heading: 'Home — about us' },
+  { key: 'aboutTitle', label: 'About heading', type: 'textarea' },
+  { key: 'aboutText', label: 'About paragraph', type: 'textarea' },
+  { key: 'aboutChips', label: 'Chips (comma separated)' },
+  { key: 'aboutBadgeTeam', label: 'Photo badge (top)' },
+  { key: 'aboutBadgeSince', label: 'Photo badge (bottom)' },
+  { heading: 'Home — vision / mission / goals' },
+  { key: 'visionTitle', label: 'Card 1 title' },
+  { key: 'visionText', label: 'Card 1 text', type: 'textarea' },
+  { key: 'missionTitle', label: 'Card 2 title' },
+  { key: 'missionText', label: 'Card 2 text', type: 'textarea' },
+  { key: 'goalsTitle', label: 'Card 3 title' },
+  { key: 'goalsText', label: 'Card 3 text', type: 'textarea' },
+  { heading: 'Home — section headings' },
+  { key: 'servicesTitle', label: 'Services heading' },
+  { key: 'projectsTitle', label: 'Featured projects heading' },
+  { key: 'testimonialsTitle', label: 'Testimonials heading' },
+  { key: 'ctaEyebrow', label: 'Bottom CTA small line' },
+  { key: 'ctaTitle', label: 'Bottom CTA headline', type: 'textarea' },
+  { heading: 'Services page' },
+  { key: 'offerTitle', label: 'Page heading' },
+  { key: 'offerDesc', label: 'Page intro', type: 'textarea' },
+  { key: 'offerCtaEyebrow', label: 'CTA small line' },
+  { key: 'offerCtaTitle', label: 'CTA headline', type: 'textarea' },
+  { heading: 'Projects page' },
+  { key: 'projectsHeroTitle', label: 'Page heading' },
+  { key: 'projectsHeroDesc', label: 'Page intro', type: 'textarea' },
+  { heading: 'Contact page' },
+  { key: 'contactHeroTitle', label: 'Page heading' },
+  { key: 'contactHeroDesc', label: 'Page intro', type: 'textarea' },
+  { key: 'contactPanelTitle', label: 'Assistance panel heading' },
+  { key: 'contactPanelText', label: 'Assistance panel text', type: 'textarea' },
+  { heading: 'Footer' },
+  { key: 'footerTagline', label: 'Footer tagline' },
+  { key: 'footerMarquee', label: 'Scrolling marquee words (comma separated)' },
+]
+
+/** Edits one settings/<docId> document as a flat form. */
+function DocForm({
+  docId,
+  fields,
+  fallback,
+  hint,
+}: {
+  docId: string
+  fields: DocField[]
+  fallback: Record<string, string | number>
+  hint?: string
+}) {
+  const [values, setValues] = useState<Record<string, string | number>>(fallback)
   const [busy, setBusy] = useState(false)
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
-    getDoc(doc(db, 'settings', 'site'))
+    getDoc(doc(db, 'settings', docId))
       .then((snap) => {
-        if (snap.exists()) setValues({ ...fallbackSettings, ...(snap.data() as Partial<Settings>) })
+        if (snap.exists()) setValues({ ...fallback, ...(snap.data() as Record<string, string | number>) })
       })
       .catch(() => {})
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [docId])
 
   const save = async (e: FormEvent) => {
     e.preventDefault()
     setBusy(true)
     try {
-      await setDoc(doc(db, 'settings', 'site'), values)
+      await setDoc(doc(db, 'settings', docId), values)
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
     } catch (err) {
@@ -318,24 +379,39 @@ function SettingsForm() {
 
   return (
     <form onSubmit={save} className="rounded-3xl bg-white p-5 shadow-sm md:p-7">
+      {hint && <p className="mb-5 rounded-2xl bg-mist p-4 text-xs font-semibold text-ink/60">{hint}</p>}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {settingsFields.map((f) => (
-          <label key={f.key}>
-            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50">{f.label}</span>
-            <input
-              type={f.type === 'number' ? 'number' : 'text'}
-              className={inputCls}
-              value={String(values[f.key])}
-              onChange={(e) =>
-                setValues({ ...values, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value })
-              }
-            />
-          </label>
-        ))}
+        {fields.map((f) =>
+          'heading' in f ? (
+            <h3 key={f.heading} className="mt-3 font-display text-lg uppercase text-ink sm:col-span-2 lg:col-span-3">
+              {f.heading}
+            </h3>
+          ) : (
+            <label key={f.key} className={f.type === 'textarea' ? 'sm:col-span-2' : ''}>
+              <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50">{f.label}</span>
+              {f.type === 'textarea' ? (
+                <textarea
+                  className={`${inputCls} min-h-20`}
+                  value={String(values[f.key] ?? '')}
+                  onChange={(e) => setValues({ ...values, [f.key]: e.target.value })}
+                />
+              ) : (
+                <input
+                  type={f.type === 'number' ? 'number' : 'text'}
+                  className={inputCls}
+                  value={String(values[f.key] ?? '')}
+                  onChange={(e) =>
+                    setValues({ ...values, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value })
+                  }
+                />
+              )}
+            </label>
+          ),
+        )}
       </div>
       <div className="mt-6 flex items-center gap-4">
         <button type="submit" disabled={busy} className={btnDark}>
-          {busy ? 'Saving…' : 'Save site info'}
+          {busy ? 'Saving…' : 'Save'}
         </button>
         {saved && <span className="text-sm font-bold text-green-600">Saved ✓</span>}
       </div>
@@ -421,6 +497,7 @@ const tabs = [
   { key: 'projects', label: 'Projects' },
   { key: 'services', label: 'Services' },
   { key: 'testimonials', label: 'Testimonials' },
+  { key: 'pages', label: 'Page text' },
   { key: 'site', label: 'Site info' },
 ] as const
 
@@ -519,7 +596,15 @@ export default function AdminPage() {
             ]}
           />
         )}
-        {tab === 'site' && <SettingsForm />}
+        {tab === 'pages' && (
+          <DocForm
+            docId="content"
+            fields={contentFields}
+            fallback={fallbackContent}
+            hint="Tip: wrap a word in stars to color it — *dream* — and press Enter in a headline box for a line break. Comma-separated fields become individual chips/words."
+          />
+        )}
+        {tab === 'site' && <DocForm docId="site" fields={settingsFields} fallback={fallbackSettings} />}
       </main>
     </div>
   )

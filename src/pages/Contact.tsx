@@ -1,8 +1,10 @@
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
-import { telHref, useSettings } from '../lib/content'
+import Fmt from '../components/Fmt'
+import { telHref, useContent, useSettings } from '../lib/content'
 
 export default function Contact() {
+  const c = useContent()
   const s = useSettings()
 
   const cards = [
@@ -36,12 +38,8 @@ export default function Contact() {
       <PageHero
         crumb="Contact"
         eyebrow="Get in touch"
-        title={
-          <>
-            Let's talk about your <span className="text-primary">project</span>
-          </>
-        }
-        description="Have questions? We're here to help. Reach out to our team and we'll get back to you as soon as possible."
+        title={<Fmt text={c.contactHeroTitle} />}
+        description={c.contactHeroDesc}
       />
 
       <section className="bg-mist py-24 text-ink md:py-32">
@@ -81,11 +79,9 @@ export default function Contact() {
               <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
               <div className="relative">
                 <h3 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.95] tracking-tight">
-                  Need immediate <span className="text-primary">assistance?</span>
+                  <Fmt text={c.contactPanelTitle} />
                 </h3>
-                <p className="mt-4 leading-relaxed text-white/60">
-                  Connect with our team instantly. We're here to help you with all your construction needs.
-                </p>
+                <p className="mt-4 leading-relaxed text-white/60">{c.contactPanelText}</p>
                 <div className="mt-7 flex items-start gap-3 text-white/70">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0 text-primary">
                     <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

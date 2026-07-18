@@ -54,6 +54,54 @@ export type Settings = {
 
 export const CATEGORIES = ['construction', 'architecture', 'building', 'renovation', 'interior']
 
+/* Every static text block on the site, editable from the admin "Page text" tab.
+   Markup: *word* renders in the accent color, a new line becomes a line break,
+   comma-separated fields (chips, words, marquee) are split where used. */
+export const fallbackContent = {
+  heroBadge: 'Construction · Architecture · Interiors',
+  heroTitle: 'We build\n*your dream*\nhouse',
+  rotatingWords: 'BLUEPRINTS, IDEAS, SPACES, DREAMS',
+  taglinePrefix: 'TURNING',
+  taglineSuffix: 'INTO REALITY.',
+  heroDesc: 'Expert craftsmanship and innovative design — we deliver construction that exceeds expectations.',
+  aboutTitle: 'Building dreams,\n*shaping* futures',
+  aboutText:
+    "At DNA Constructions and Architecture, we don't just build structures — we create living spaces that reflect your vision. With expertise in both construction and design, we handle projects of all sizes, ensuring quality and excellence from start to finish.",
+  aboutChips: 'Residential, Commercial, Architecture, Interiors, Renovation',
+  aboutBadgeTeam: 'The DNA Team',
+  aboutBadgeSince: 'Since 2022',
+  visionTitle: 'Vision',
+  visionText:
+    'Ingenious solutions in the green energy domain — fine-tuning the balance between cost optimization and energy conservation.',
+  missionTitle: 'Mission',
+  missionText:
+    'We embrace technologies for a brighter future, delivering solutions that empower and transform lives through sustainability and excellence.',
+  goalsTitle: 'Goals',
+  goalsText: 'Quality and excellence in every project — delivered on time, on budget, and beyond expectations.',
+  servicesTitle: 'Crafting spaces, *elevating* experiences',
+  projectsTitle: 'Featured *projects*',
+  testimonialsTitle: 'Our clients *say*',
+  ctaEyebrow: 'Have a project in mind?',
+  ctaTitle: "Let's build\ntogether",
+  offerTitle: 'Everything your *build needs*',
+  offerDesc:
+    'From concept to completion, we offer a full range of construction and design services tailored to bring your vision to life.',
+  offerCtaEyebrow: 'Ready to start?',
+  offerCtaTitle: "Let's talk about\nyour *project*",
+  projectsHeroTitle: 'Built with *pride*',
+  projectsHeroDesc:
+    'Explore our collection of completed construction and design projects that showcase our commitment to quality and excellence.',
+  contactHeroTitle: "Let's talk about your *project*",
+  contactHeroDesc:
+    "Have questions? We're here to help. Reach out to our team and we'll get back to you as soon as possible.",
+  contactPanelTitle: 'Need immediate *assistance?*',
+  contactPanelText: "Connect with our team instantly. We're here to help you with all your construction needs.",
+  footerTagline: 'We build your *dream house*',
+  footerMarquee: 'BUILDING YOUR DREAM HOUSE, CONSTRUCTION, ARCHITECTURE, INTERIORS',
+}
+
+export type SiteContent = typeof fallbackContent
+
 /* Fallback content: what the site shows until Firestore is connected and seeded. */
 
 export const fallbackProjects: Project[] = [
@@ -219,6 +267,34 @@ export function useSettings(): Settings {
   }, [])
   return data
 }
+
+/** Reads the settings/content document (all static page text); falls back per key. */
+export function useContent(): SiteContent {
+  const [data, setData] = useState<SiteContent>(
+    () => cacheGet<SiteContent>('content')?.value ?? fallbackContent,
+  )
+  useEffect(() => {
+    if (!firebaseReady) return
+    if (cacheGet<SiteContent>('content')?.fresh) return
+    getDoc(doc(db, 'settings', 'content'))
+      .then((snap) => {
+        if (snap.exists()) {
+          const merged = { ...fallbackContent, ...(snap.data() as Partial<SiteContent>) }
+          setData(merged)
+          cacheSet('content', merged)
+        }
+      })
+      .catch(() => {})
+  }, [])
+  return data
+}
+
+/** Splits a comma-separated admin field into trimmed non-empty items. */
+export const splitList = (s: string) =>
+  s
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean)
 
 export const telHref = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`
 

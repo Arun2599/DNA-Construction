@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
-import { fallbackServices, useList, type Service } from '../lib/content'
+import Fmt from '../components/Fmt'
+import { fallbackServices, useContent, useList, type Service } from '../lib/content'
 
 /* Content comes from Firestore (editable at /admin); the style cycle keeps the poster look. */
 const styles = [
@@ -15,18 +16,15 @@ const styles = [
 ]
 
 export default function WhatWeOffer() {
+  const c = useContent()
   const services: Service[] = useList('services', fallbackServices)
   return (
     <main>
       <PageHero
         crumb="Services"
         eyebrow="Our services"
-        title={
-          <>
-            Everything your <span className="text-primary">build needs</span>
-          </>
-        }
-        description="From concept to completion, we offer a full range of construction and design services tailored to bring your vision to life."
+        title={<Fmt text={c.offerTitle} />}
+        description={c.offerDesc}
       />
 
       <section className="bg-mist py-24 text-ink md:py-32">
@@ -65,11 +63,9 @@ export default function WhatWeOffer() {
             <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-primary opacity-20 blur-[100px]" />
             <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
             <div className="relative px-6">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Ready to start?</p>
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">{c.offerCtaEyebrow}</p>
               <h3 className="mt-5 font-display text-[clamp(2.4rem,6vw,5rem)] uppercase leading-[0.95] tracking-tight">
-                Let's talk about
-                <br />
-                your <span className="text-primary">project</span>
+                <Fmt text={c.offerCtaTitle} />
               </h3>
               <Magnetic className="mt-10">
                 <Link

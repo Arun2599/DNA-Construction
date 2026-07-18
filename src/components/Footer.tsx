@@ -2,9 +2,11 @@ import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { prefersReducedMotion } from './Reveal'
-import { telHref, useSettings } from '../lib/content'
+import Fmt from './Fmt'
+import { splitList, telHref, useContent, useSettings } from '../lib/content'
 
 export default function Footer() {
+  const c = useContent()
   const s = useSettings()
   const track = useRef<HTMLDivElement>(null)
   const tweenRef = useRef<gsap.core.Tween | null>(null)
@@ -30,7 +32,7 @@ export default function Footer() {
         <div ref={track} className="flex w-max items-center whitespace-nowrap will-change-transform">
           {[0, 1].map((half) => (
             <span key={half} className="flex items-center">
-              {['BUILDING YOUR DREAM HOUSE', 'CONSTRUCTION', 'ARCHITECTURE', 'INTERIORS'].map((word) => (
+              {splitList(c.footerMarquee).map((word) => (
                 <span key={word} className="flex items-center">
                   <span className="font-display text-4xl uppercase text-white/10 transition-colors duration-500 hover:text-primary/40 md:text-7xl">
                     {word}
@@ -57,7 +59,7 @@ export default function Footer() {
             </div>
           </div>
           <p className="mt-6 font-display text-3xl uppercase leading-none text-white/80">
-            We build your <span className="text-primary">dream house</span>
+            <Fmt text={c.footerTagline} />
           </p>
         </div>
 

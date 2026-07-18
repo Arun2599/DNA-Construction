@@ -4,7 +4,10 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Reveal, { prefersReducedMotion } from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
+import Fmt, { fmtAccent } from '../components/Fmt'
 import {
+  splitList,
+  useContent,
   fallbackProjects,
   fallbackServices,
   fallbackTestimonials,
@@ -18,17 +21,15 @@ import {
 
 gsap.registerPlugin(ScrollTrigger)
 
-const rotatingWords = ['BLUEPRINTS', 'IDEAS', 'SPACES', 'DREAMS']
-
-function RotatingWord() {
+function RotatingWord({ words }: { words: string[] }) {
   const [i, setI] = useState(0)
   useEffect(() => {
-    const id = setInterval(() => setI((v) => (v + 1) % rotatingWords.length), 2000)
+    const id = setInterval(() => setI((v) => (v + 1) % words.length), 2000)
     return () => clearInterval(id)
-  }, [])
+  }, [words.length])
   return (
     <span key={i} className="animate-word-in inline-block font-display text-primary">
-      {rotatingWords[i]}
+      {words[i]}
     </span>
   )
 }
@@ -147,6 +148,7 @@ function TestimonialMarquee({ items }: { items: Testimonial[] }) {
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
+  const c = useContent()
   const settings = useSettings()
   const services: Service[] = useList('services', fallbackServices).slice(0, 3)
   const allProjects: Project[] = useList('projects', fallbackProjects)
@@ -197,31 +199,26 @@ export default function Home() {
         <div className="relative z-20 mx-auto w-full max-w-[1300px] px-5 pb-24 pt-36 md:px-10 md:pt-40">
           <p className="blur-in mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.25em] text-primary backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-primary" />
-            Construction · Architecture · Interiors
+            {c.heroBadge}
           </p>
 
           <h1 className="font-display text-[clamp(3.4rem,13vw,11.5rem)] uppercase leading-[0.88] tracking-tight">
-            <span className="inline-block overflow-hidden align-top">
-              <span className="hero-word inline-block will-change-transform">WE&nbsp;BUILD</span>
-            </span>
-            <br />
-            <span className="inline-block overflow-hidden align-top">
-              <span className="hero-word inline-block text-primary will-change-transform">YOUR&nbsp;DREAM</span>
-            </span>
-            <br />
-            <span className="inline-block overflow-hidden align-top">
-              <span className="hero-word inline-block will-change-transform">HOUSE</span>
-            </span>
+            {c.heroTitle.split('\n').map((line, i, arr) => (
+              <span key={i}>
+                <span className="inline-block overflow-hidden align-top">
+                  <span className="hero-word inline-block will-change-transform">{fmtAccent(line)}</span>
+                </span>
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
           </h1>
 
           <div className="mt-8 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
             <div className="max-w-md">
               <p className="blur-in text-lg font-semibold text-white/90">
-                TURNING <RotatingWord /> INTO REALITY.
+                {c.taglinePrefix} <RotatingWord words={splitList(c.rotatingWords)} /> {c.taglineSuffix}
               </p>
-              <p className="blur-in mt-3 leading-relaxed text-white/60">
-                Expert craftsmanship and innovative design — we deliver construction that exceeds expectations.
-              </p>
+              <p className="blur-in mt-3 leading-relaxed text-white/60">{c.heroDesc}</p>
               <div className="blur-in mt-7 flex flex-wrap gap-4">
                 <Magnetic>
                   <Link
@@ -280,17 +277,11 @@ export default function Home() {
                 About us
               </p>
               <h2 className="font-display text-[clamp(2.6rem,7vw,5rem)] uppercase leading-[0.92] tracking-tight">
-                Building dreams,
-                <br />
-                <span className="text-primary">shaping</span> futures
+                <Fmt text={c.aboutTitle} />
               </h2>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-2">
-                At DNA Constructions and Architecture, we don't just build structures — we create living spaces that
-                reflect your vision. With expertise in both construction and design, we handle projects of all sizes,
-                ensuring quality and excellence from start to finish.
-              </p>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-2">{c.aboutText}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                {['Residential', 'Commercial', 'Architecture', 'Interiors', 'Renovation'].map((chip) => (
+                {splitList(c.aboutChips).map((chip) => (
                   <span
                     key={chip}
                     className="rounded-full border-2 border-ink/10 bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-ink/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:text-primary-dark"
@@ -310,10 +301,10 @@ export default function Home() {
                 />
                 <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/50 to-transparent" />
                 <span className="absolute left-5 top-5 rounded-full bg-white/85 px-4 py-2 text-xs font-bold uppercase tracking-wide text-ink shadow-md backdrop-blur-md">
-                  The DNA Team
+                  {c.aboutBadgeTeam}
                 </span>
                 <span className="absolute bottom-5 right-5 rotate-[-2deg] rounded-2xl bg-sun px-5 py-3 font-display text-xl uppercase text-ink shadow-xl transition-transform duration-500 group-hover:rotate-0">
-                  Since 2022
+                  {c.aboutBadgeSince}
                 </span>
               </div>
             </Reveal>
@@ -321,30 +312,9 @@ export default function Home() {
 
           <div className="mt-14 grid gap-7 lg:grid-cols-3">
             {[
-                {
-                  n: '01',
-                  h: 'Vision',
-                  p: 'Ingenious solutions in the green energy domain — fine-tuning the balance between cost optimization and energy conservation.',
-                  bg: 'bg-ink',
-                  dark: true,
-                  tilt: -1.5,
-                },
-                {
-                  n: '02',
-                  h: 'Mission',
-                  p: 'We embrace technologies for a brighter future, delivering solutions that empower and transform lives through sustainability and excellence.',
-                  bg: 'bg-primary',
-                  dark: false,
-                  tilt: 1.5,
-                },
-                {
-                  n: '03',
-                  h: 'Goals',
-                  p: 'Quality and excellence in every project — delivered on time, on budget, and beyond expectations.',
-                  bg: 'bg-sun',
-                  dark: false,
-                  tilt: -1,
-                },
+                { n: '01', h: c.visionTitle, p: c.visionText, bg: 'bg-ink', dark: true, tilt: -1.5 },
+                { n: '02', h: c.missionTitle, p: c.missionText, bg: 'bg-primary', dark: false, tilt: 1.5 },
+                { n: '03', h: c.goalsTitle, p: c.goalsText, bg: 'bg-sun', dark: false, tilt: -1 },
               ].map((item, i) => (
               <Reveal key={item.h} delay={(i % 3) * 0.1} stackTop={96 + i * 10}>
                 <div
@@ -372,7 +342,7 @@ export default function Home() {
               What we offer
             </p>
             <h2 className="max-w-4xl font-display text-[clamp(2.6rem,7vw,5.5rem)] uppercase leading-[0.92] tracking-tight">
-              Crafting spaces, <span className="text-primary">elevating</span> experiences
+              <Fmt text={c.servicesTitle} />
             </h2>
           </Reveal>
 
@@ -427,7 +397,7 @@ export default function Home() {
                 Our work
               </p>
               <h2 className="font-display text-[clamp(2.6rem,7vw,5.5rem)] uppercase leading-[0.92] tracking-tight">
-                Featured <span className="text-primary">projects</span>
+                <Fmt text={c.projectsTitle} />
               </h2>
             </div>
             <Magnetic>
@@ -492,7 +462,7 @@ export default function Home() {
               Testimonials
             </p>
             <h2 className="font-display text-[clamp(2.6rem,7vw,5.5rem)] uppercase leading-[0.92] tracking-tight">
-              Our clients <span className="text-primary">say</span>
+              <Fmt text={c.testimonialsTitle} />
             </h2>
           </Reveal>
         </div>
@@ -509,14 +479,12 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-[1300px] px-5 text-center md:px-10">
           <Reveal stagger={0.12}>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Have a project in mind?</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">{c.ctaEyebrow}</p>
             <Link
               to="/contact"
               className="group mt-6 block font-display text-[clamp(2.8rem,9vw,8rem)] uppercase leading-[0.95] tracking-tight transition-colors duration-300 hover:text-primary"
             >
-              Let's build
-              <br />
-              together
+              <Fmt text={c.ctaTitle} />
               <svg
                 width="0.7em"
                 height="0.7em"

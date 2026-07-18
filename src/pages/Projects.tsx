@@ -2,11 +2,13 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
-import { CATEGORIES, fallbackProjects, useList, type Project } from '../lib/content'
+import Fmt from '../components/Fmt'
+import { CATEGORIES, fallbackProjects, useContent, useList, type Project } from '../lib/content'
 
 const categories = ['all', ...CATEGORIES]
 
 export default function Projects() {
+  const c = useContent()
   const [filter, setFilter] = useState('all')
   const topRef = useRef<HTMLDivElement>(null)
   const projects: Project[] = useList('projects', fallbackProjects)
@@ -26,12 +28,8 @@ export default function Projects() {
       <PageHero
         crumb="Projects"
         eyebrow="Our portfolio"
-        title={
-          <>
-            Built with <span className="text-primary">pride</span>
-          </>
-        }
-        description="Explore our collection of completed construction and design projects that showcase our commitment to quality and excellence."
+        title={<Fmt text={c.projectsHeroTitle} />}
+        description={c.projectsHeroDesc}
       />
 
       <section className="bg-mist py-24 text-ink md:py-32">
