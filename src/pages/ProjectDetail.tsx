@@ -34,7 +34,7 @@ export default function ProjectDetail() {
       <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-ink text-white">
         <img src={p.img} alt={p.title} className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/60" />
-        <div className="grain pointer-events-none absolute inset-0 z-10 opacity-[0.35] mix-blend-overlay" />
+        <div className="grain pointer-events-none absolute inset-0 z-10 opacity-[0.35]" />
 
         <div className="relative z-20 mx-auto w-full max-w-[1300px] px-5 pb-14 pt-36 md:px-10">
           <Reveal stagger={0.08}>
@@ -108,8 +108,8 @@ export default function ProjectDetail() {
 
           {/* ============ CTA ============ */}
           <Reveal className="relative mt-24 overflow-hidden rounded-[2.5rem] bg-ink py-16 text-center text-white md:py-20">
-            <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-primary opacity-20 blur-[100px]" />
-            <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
+            <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full text-primary opacity-20 orb" />
+            <div className="grain pointer-events-none absolute inset-0 opacity-[0.35]" />
             <div className="relative px-6">
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Like this project?</p>
               <h3 className="mt-4 font-display text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] tracking-tight">

@@ -75,8 +75,8 @@ export default function Contact() {
 
           <Reveal className="mt-16">
             <div className="relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] bg-ink p-10 text-white md:grid-cols-2 md:p-14">
-              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary opacity-20 blur-[100px]" />
-              <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full text-primary opacity-20 orb" />
+              <div className="grain pointer-events-none absolute inset-0 opacity-[0.35]" />
               <div className="relative">
                 <h3 className="font-display text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.95] tracking-tight">
                   <Fmt text={c.contactPanelTitle} />
@@ -104,7 +104,7 @@ export default function Contact() {
                   WhatsApp
                 </a>
               </div>
-              <img src="/images/we-offer.jpg" alt="DNA Constructions engineer reviewing plans on site" className="relative hidden h-80 w-full rounded-[2rem] object-cover shadow-2xl md:block" />
+              <img src="/images/we-offer.webp" alt="DNA Constructions engineer reviewing plans on site" className="relative hidden h-80 w-full rounded-[2rem] object-cover shadow-2xl md:block" />
             </div>
           </Reveal>
 
@@ -144,7 +144,7 @@ export default function Contact() {
         {/* site-palette wash + grain so the map sits with the rest of the design */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-primary/10 mix-blend-multiply" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-mist to-transparent" />
-        <div className="grain pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" />
+        <div className="grain pointer-events-none absolute inset-0 opacity-20" />
 
         {/* label → thin line down to the pin (pin is always at horizontal center) */}
         <div className="absolute left-1/2 top-0 flex h-[46%] -translate-x-1/2 flex-col items-center">

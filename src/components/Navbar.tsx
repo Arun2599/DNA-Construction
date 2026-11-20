@@ -37,7 +37,7 @@ export default function Navbar() {
       }`}
     >
       <nav
-        className={`animate-nav-in flex w-full max-w-4xl items-center justify-between rounded-full border border-white/10 bg-ink/80 px-3 py-2 backdrop-blur-xl transition-shadow duration-500 ${
+        className={`animate-nav-in flex w-full max-w-4xl items-center justify-between rounded-full border border-white/10 bg-ink/90 px-3 py-2 transition-shadow duration-500 ${
           scrolled ? 'shadow-xl shadow-black/40' : ''
         }`}
       >

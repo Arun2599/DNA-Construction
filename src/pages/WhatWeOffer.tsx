@@ -60,8 +60,8 @@ export default function WhatWeOffer() {
 
           {/* CTA */}
           <Reveal className="relative mt-24 overflow-hidden rounded-[2.5rem] bg-ink py-20 text-center text-white md:py-24">
-            <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-primary opacity-20 blur-[100px]" />
-            <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
+            <div className="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full text-primary opacity-20 orb" />
+            <div className="grain pointer-events-none absolute inset-0 opacity-[0.35]" />
             <div className="relative px-6">
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">{c.offerCtaEyebrow}</p>
               <h3 className="mt-5 font-display text-[clamp(2.4rem,6vw,5rem)] uppercase leading-[0.95] tracking-tight">

@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Reveal, { prefersReducedMotion } from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
+import Scene3D, { introScene, playScene, staticScene } from '../components/Scene3D'
 import Fmt, { fmtAccent } from '../components/Fmt'
 import {
   splitList,
@@ -73,13 +74,13 @@ function StatCard({
   }, [value, suffix])
   return (
     <div
-      className={`${bg} w-[150px] rounded-2xl p-5 text-ink shadow-xl shadow-black/20 transition-transform duration-500 hover:rotate-0 hover:scale-105 md:w-[170px]`}
+      className={`${bg} w-full rounded-2xl p-3.5 text-ink sm:p-5 shadow-xl shadow-black/20 transition-transform duration-500 hover:rotate-0 hover:scale-105 sm:w-[150px] md:w-[170px]`}
       style={{ rotate: `${tilt}deg` }}
     >
-      <p ref={ref} className="font-display text-4xl md:text-5xl">
+      <p ref={ref} className="font-display text-3xl sm:text-4xl md:text-5xl">
         0{suffix}
       </p>
-      <p className="mt-1 text-xs font-bold uppercase tracking-wide text-ink/70">{label}</p>
+      <p className="mt-1 text-[10px] font-bold uppercase leading-tight tracking-wide text-ink/70 sm:text-xs">{label}</p>
     </div>
   )
 }
@@ -159,52 +160,147 @@ export default function Home() {
   const testimonials: Testimonial[] = useList('testimonials', fallbackTestimonials)
 
   useLayoutEffect(() => {
-    if (prefersReducedMotion()) return
+    const hero = heroRef.current
+    if (!hero) return
+    const q = gsap.utils.selector(hero)
+    if (prefersReducedMotion()) {
+      staticScene(q('.p3-scene')[0] as HTMLElement) // show only the finished house
+      return
+    }
+    // Everything below animates transform/opacity only, so it stays on the GPU at 60fps.
+    // Each element gets one job (intro, scroll, or mouse) via nested wrappers so tweens never fight.
+    const mm = gsap.matchMedia(hero) // scoped: class selectors resolve inside the hero
     const ctx = gsap.context(() => {
-      gsap
-        .timeline({ defaults: { ease: 'power4.out' } })
-        .fromTo('.hero-word', { yPercent: 110 }, { yPercent: 0, duration: 1.1, stagger: 0.08, delay: 0.15 })
+      // 1 · intro: a seam of light splits the shutter, the house settles in, type rises, cards slap on
+      gsap.set(q('.hero-shutter, .hero-seam'), { autoAlpha: 1 })
+      const intro = gsap
+        .timeline({ defaults: { ease: 'expo.out' } })
+        .fromTo(q('.hero-seam'), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: 'power3.inOut' })
+        .to(q('.hero-shutter-top'), { yPercent: -100, duration: 1.4, ease: 'expo.inOut' })
+        .to(q('.hero-shutter-bot'), { yPercent: 100, duration: 1.4, ease: 'expo.inOut' }, '<')
+        .to(q('.hero-seam'), { autoAlpha: 0, duration: 0.4 }, '<0.25')
+        .fromTo(q('.hero-img'), { scale: 1.35 }, { scale: 1.08, duration: 2.6 }, '<')
+        .fromTo(q('.hero-word'), { yPercent: 140, rotate: 4 }, { yPercent: 0, rotate: 0, duration: 1.2, stagger: 0.09 }, 1.1)
+        .fromTo(q('.blur-in'), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out' }, '<0.45')
         .fromTo(
-          '.blur-in',
-          { autoAlpha: 0, y: 20, filter: 'blur(10px)' },
-          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: 0.1, ease: 'power3.out' },
-          '-=0.7',
+          q('.hero-card'),
+          { autoAlpha: 0, y: 140, scale: 0.55, rotate: (i: number) => [-28, 20, -16][i % 3] },
+          { autoAlpha: 1, y: 0, scale: 1, rotate: 0, duration: 1, stagger: 0.12, ease: 'back.out(1.7)' },
+          '<0.15',
         )
-      gsap.to('.hero-bg', {
-        yPercent: 18,
-        ease: 'none',
-        scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
-      })
-      gsap.to('.hero-orb', {
-        yPercent: -25,
-        ease: 'none',
-        scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
-      })
-    }, heroRef)
-    return () => ctx.revert()
+        .fromTo(q('.hero-call'), { autoAlpha: 0, xPercent: 60 }, { autoAlpha: 1, xPercent: 0, duration: 1.1 }, '<0.2')
+      // the 3D blueprint house appears with a laser scan while the type lands
+      const scene = q('.p3-scene')[0] as HTMLElement
+      introScene(intro, scene, 1.0)
+
+      // 2 · idle life: the photo breathes slowly once the intro has landed
+      gsap.to(q('.hero-img'), { scale: 1.16, duration: 9, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: intro.duration() })
+
+      // 3 · scroll: the house builds itself, plot → handover ("watch your home rise")
+      mm.add('(min-width: 1024px)', () =>
+        // desktop: the whole landing screen pins; the copy steps aside and the camera takes over
+        playScene(
+          scene,
+          { trigger: hero, start: 'top top', end: '+=500%', pin: true, scrub: 0.8 },
+          {
+            sxv: 0.2,
+            onStart: (tl) =>
+              tl
+                .to(q('.hero-content, .hero-call'), { autoAlpha: 0, x: -80, duration: 0.6, ease: 'power2.in' }, 's0')
+                .to(q('.hero-depth-bg'), { opacity: 0.35, duration: 0.6, ease: 'none' }, 's0'),
+          },
+        ),
+      )
+      mm.add('(max-width: 1023px)', () =>
+        // phone: the 3D stage sits under the copy and pins itself for the build
+        // pinSpacing must be explicit: the hero is a flex column, where ScrollTrigger defaults it off
+        playScene(scene, { trigger: scene, start: 'top top', end: '+=400%', pin: true, pinSpacing: true, scrub: 0.6 }),
+      )
+    }, hero)
+
+    // 4 · depth on desktop: photo, headline and cards drift at different depths with the pointer
+    let onMove: ((e: PointerEvent) => void) | undefined
+    if (matchMedia('(pointer: fine)').matches) {
+      const layers = (
+        [
+          ['.hero-depth-bg', -16],
+          ['.hero-depth-text', 8],
+          ['.hero-cards', 22],
+        ] as const
+      ).map(([sel, amt]) => ({
+        x: gsap.quickTo(q(sel), 'x', { duration: 1.2, ease: 'power3' }),
+        y: gsap.quickTo(q(sel), 'y', { duration: 1.2, ease: 'power3' }),
+        amt,
+      }))
+      // cursor spotlight: a soft light that lights up the blueprint grid wherever you point
+      gsap.set(q('.hero-spot'), { xPercent: -50, yPercent: -50 })
+      const spotX = gsap.quickTo(q('.hero-spot'), 'x', { duration: 0.6, ease: 'power3' })
+      const spotY = gsap.quickTo(q('.hero-spot'), 'y', { duration: 0.6, ease: 'power3' })
+      onMove = (e) => {
+        const r = hero.getBoundingClientRect()
+        spotX(e.clientX - r.left)
+        spotY(e.clientY - r.top)
+        const nx = e.clientX / innerWidth - 0.5
+        const ny = e.clientY / innerHeight - 0.5
+        for (const l of layers) {
+          l.x(nx * l.amt * 2)
+          l.y(ny * l.amt * 2)
+        }
+      }
+      hero.addEventListener('pointermove', onMove)
+    }
+    return () => {
+      if (onMove) hero.removeEventListener('pointermove', onMove)
+      mm.revert()
+      ctx.revert()
+    }
   }, [])
 
   return (
     <main>
       {/* ============ HERO ============ */}
-      <section ref={heroRef} className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-ink text-white">
-        <img
-          src="/images/home-hero.svg"
-          alt=""
-          className="hero-bg absolute inset-0 h-[115%] w-full object-cover opacity-25 will-change-transform"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/50 to-ink" />
-        <div className="hero-orb pointer-events-none absolute -left-32 top-1/4 h-[420px] w-[420px] rounded-full bg-primary opacity-25 blur-[100px]" />
-        <div className="hero-orb pointer-events-none absolute -right-24 top-10 h-96 w-96 rounded-full bg-sun opacity-15 blur-[100px]" />
-        <div className="grain pointer-events-none absolute inset-0 z-10 opacity-[0.35] mix-blend-overlay" />
+      <section ref={heroRef} className="relative flex min-h-svh flex-col justify-center overflow-hidden bg-[#071a2e] text-white">
+        {/* media: scroll layer › mouse-depth layer › image (intro zoom + breathing) */}
+        <div className="hero-media absolute inset-0 will-change-transform">
+          <div className="hero-depth-bg absolute -inset-10">
+            <img
+              src="/images/home-hero.webp"
+              alt=""
+              {...{ fetchpriority: 'high' }} /* React 18 only knows the lowercase attribute */
+              className="hero-img h-full w-full object-cover opacity-60 will-change-transform"
+            />
+          </div>
+        </div>
+        {/* cinematic fade: solid behind the type on the left, the house shows through on the right */}
+        {/* blueprint poster: navy wash over the photo, drafting grid, giant outlined DNA */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071a2e] via-[#071a2e]/85 to-[#071a2e]/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071a2e] via-transparent to-[#071a2e]/60" />
+        <div className="blueprint-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_68%_45%,black_15%,transparent_72%)]" />
+        <div className="hero-spot pointer-events-none absolute left-0 top-0 hidden h-[640px] w-[640px] rounded-full text-primary opacity-25 orb lg:block" />
+        <span
+          aria-hidden
+          className="hero-dna pointer-events-none absolute -bottom-[5vw] -right-[3vw] select-none font-display text-[38vw] leading-[0.8] text-transparent [-webkit-text-stroke:2px_rgba(143,227,255,0.10)]"
+        >
+          DNA
+        </span>
+        <div className="hero-orb pointer-events-none absolute -left-32 top-1/4 h-[460px] w-[460px] rounded-full text-primary opacity-40 orb" />
+        <div className="hero-orb pointer-events-none absolute -right-24 top-10 h-96 w-96 rounded-full text-sun opacity-30 orb" />
+        <div className="hero-orb pointer-events-none absolute bottom-0 right-1/3 h-80 w-80 rounded-full text-[#F4845F] opacity-20 orb" />
+        <div className="grain pointer-events-none absolute inset-0 z-10 opacity-[0.35]" />
 
-        <div className="relative z-20 mx-auto w-full max-w-[1300px] px-5 pb-24 pt-36 md:px-10 md:pt-40">
-          <p className="blur-in mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.25em] text-primary backdrop-blur-md">
+        {/* intro shutter: hidden unless the intro runs (reduced motion never sees it) */}
+        <div className="hero-shutter hero-shutter-top invisible absolute inset-x-0 top-0 z-[15] h-1/2 bg-[#071a2e]" />
+        <div className="hero-shutter hero-shutter-bot invisible absolute inset-x-0 bottom-0 z-[15] h-1/2 bg-[#071a2e]" />
+        <div className="hero-seam invisible absolute inset-x-0 top-1/2 z-[16] h-[2px] origin-left bg-primary shadow-[0_0_24px_4px_rgba(76,201,240,0.6)]" />
+
+        <div className="hero-content relative z-20 mx-auto w-full max-w-[1300px] px-5 pb-16 pt-28 md:px-10 md:pb-20 md:pt-32">
+          <p className="blur-in mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
             <span className="h-2 w-2 rounded-full bg-primary" />
             {c.heroBadge}
           </p>
 
-          <h1 className="font-display text-[clamp(3.4rem,13vw,11.5rem)] uppercase leading-[0.88] tracking-tight">
+          <div className="hero-depth-text">
+          <h1 className="font-display text-[clamp(3.2rem,min(15vw,16svh),11rem)] uppercase leading-[0.88] tracking-tight">
             {c.heroTitle.split('\n').map((line, i, arr) => (
               <span key={i}>
                 <span className="inline-block overflow-hidden align-top">
@@ -214,6 +310,7 @@ export default function Home() {
               </span>
             ))}
           </h1>
+          </div>
 
           <div className="mt-8 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
             <div className="max-w-md">
@@ -244,17 +341,29 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="blur-in flex flex-wrap gap-4 md:gap-5">
-              <StatCard value={settings.statProjects} suffix="+" label="Projects Done" bg="bg-primary" tilt={-3} />
-              <StatCard value={settings.statYears} suffix="+" label="Years Experience" bg="bg-white" tilt={2} />
-              <StatCard value={settings.statClients} suffix="%" label="Happy Clients" bg="bg-sun" tilt={-2} />
+            {/* cards: mouse-depth container › scroll parallax › intro slap › the card itself (hover) */}
+            <div className="hero-cards grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:gap-4 md:gap-5">
+              {[
+                { value: settings.statProjects, suffix: '+', label: 'Projects Done', bg: 'bg-primary', tilt: -3 },
+                { value: settings.statYears, suffix: '+', label: 'Years Experience', bg: 'bg-white', tilt: 2 },
+                { value: settings.statClients, suffix: '%', label: 'Happy Clients', bg: 'bg-sun', tilt: -2 },
+              ].map((st) => (
+                <div key={st.label} className="hero-card-p">
+                  <div className="hero-card">
+                    <StatCard {...st} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
+        {/* the 3D house: full-bleed behind the copy on desktop, its own pinned screen under it on phones */}
+        <Scene3D className="relative h-svh lg:absolute lg:inset-0 lg:z-[12] lg:h-auto" />
+
         <a
           href={telHref(settings.phone1)}
-          className="blur-in group absolute bottom-6 right-5 z-20 hidden items-center gap-2 font-display text-[clamp(1.4rem,3.5vw,3rem)] uppercase leading-none text-white/90 transition-colors duration-300 hover:text-primary lg:flex"
+          className="hero-call group absolute bottom-6 right-5 z-20 hidden items-center gap-2 font-display text-[clamp(1.4rem,3.5vw,3rem)] uppercase leading-none text-white/90 transition-colors duration-300 hover:text-primary lg:flex"
         >
           Call us
           <svg width="0.8em" height="0.8em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
@@ -475,9 +584,9 @@ export default function Home() {
 
       {/* ============ CTA ============ */}
       <section className="relative overflow-hidden bg-ink py-28 text-white md:py-36">
-        <div className="pointer-events-none absolute -left-24 top-0 h-96 w-96 rounded-full bg-primary opacity-20 blur-[100px]" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-sun opacity-10 blur-[100px]" />
-        <div className="grain pointer-events-none absolute inset-0 opacity-[0.35] mix-blend-overlay" />
+        <div className="pointer-events-none absolute -left-24 top-0 h-96 w-96 rounded-full text-primary opacity-20 orb" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full text-sun opacity-10 orb" />
+        <div className="grain pointer-events-none absolute inset-0 opacity-[0.35]" />
 
         <div className="relative mx-auto max-w-[1300px] px-5 text-center md:px-10">
           <Reveal stagger={0.12}>

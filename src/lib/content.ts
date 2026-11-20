@@ -78,6 +78,15 @@ export const fallbackContent = {
     'We embrace technologies for a brighter future, delivering solutions that empower and transform lives through sustainability and excellence.',
   goalsTitle: 'Goals',
   goalsText: 'Quality and excellence in every project — delivered on time, on budget, and beyond expectations.',
+  buildStages: [
+    'The plot | We survey, measure and mark every corner before a single brick moves.',
+    'Foundation | Footings dug deep and a plinth beam that carries the house for generations.',
+    'Structure | RCC columns and slabs rise floor by floor — the skeleton of your home.',
+    'Walls | Brick by brick, rooms take shape around the plan you signed off.',
+    'Handover | Paint, lights, landscaping — and the keys go into your hands.',
+  ].join('\n'),
+  buildFinale: 'Welcome\n*home*',
+  buildFinaleCta: 'Start your build',
   servicesTitle: 'Crafting spaces, *elevating* experiences',
   projectsTitle: 'Featured *projects*',
   testimonialsTitle: 'Our clients *say*',
@@ -105,15 +114,15 @@ export type SiteContent = typeof fallbackContent
 /* Fallback content: what the site shows until Firestore is connected and seeded. */
 
 export const fallbackProjects: Project[] = [
-  { id: 'f1', title: 'Modern Office Building', desc: 'Interior work', category: 'interior', img: '/images/project.jpg', featured: true, order: 1, location: 'Neyveli', year: '2024' },
-  { id: 'f2', title: 'Luxury Apartment', desc: 'Construction work', category: 'construction', img: '/images/we-offer.jpg', featured: true, order: 2, location: 'Cuddalore', year: '2024' },
-  { id: 'f3', title: 'Shopping Complex', desc: 'Architecture design', category: 'architecture', img: '/images/home-sub.svg', featured: true, order: 3, location: 'Chennai', year: '2023' },
-  { id: 'f4', title: 'Residential Villa', desc: 'Building work', category: 'building', img: '/images/home-hero.svg', featured: true, order: 4, location: 'Neyveli', year: '2023' },
-  { id: 'f5', title: 'Heritage Building', desc: 'Renovation work', category: 'renovation', img: '/images/project.jpg', order: 5, location: 'Cuddalore', year: '2023' },
-  { id: 'f6', title: 'Corporate Office', desc: 'Interior design', category: 'interior', img: '/images/we-offer.jpg', order: 6, location: 'Chennai', year: '2024' },
-  { id: 'f7', title: 'Modern House', desc: 'Construction work', category: 'construction', img: '/images/home-sub.svg', order: 7, location: 'Neyveli', year: '2025' },
-  { id: 'f8', title: 'Commercial Complex', desc: 'Architecture design', category: 'architecture', img: '/images/home-hero.svg', order: 8, location: 'Cuddalore', year: '2022' },
-  { id: 'f9', title: 'Beach House', desc: 'Building work', category: 'building', img: '/images/project.jpg', order: 9, location: 'Pondicherry', year: '2025' },
+  { id: 'f1', title: 'Modern Office Building', desc: 'Interior work', category: 'interior', img: '/images/project.webp', featured: true, order: 1, location: 'Neyveli', year: '2024' },
+  { id: 'f2', title: 'Luxury Apartment', desc: 'Construction work', category: 'construction', img: '/images/we-offer.webp', featured: true, order: 2, location: 'Cuddalore', year: '2024' },
+  { id: 'f3', title: 'Shopping Complex', desc: 'Architecture design', category: 'architecture', img: '/images/home-sub.webp', featured: true, order: 3, location: 'Chennai', year: '2023' },
+  { id: 'f4', title: 'Residential Villa', desc: 'Building work', category: 'building', img: '/images/home-hero.webp', featured: true, order: 4, location: 'Neyveli', year: '2023' },
+  { id: 'f5', title: 'Heritage Building', desc: 'Renovation work', category: 'renovation', img: '/images/project.webp', order: 5, location: 'Cuddalore', year: '2023' },
+  { id: 'f6', title: 'Corporate Office', desc: 'Interior design', category: 'interior', img: '/images/we-offer.webp', order: 6, location: 'Chennai', year: '2024' },
+  { id: 'f7', title: 'Modern House', desc: 'Construction work', category: 'construction', img: '/images/home-sub.webp', order: 7, location: 'Neyveli', year: '2025' },
+  { id: 'f8', title: 'Commercial Complex', desc: 'Architecture design', category: 'architecture', img: '/images/home-hero.webp', order: 8, location: 'Cuddalore', year: '2022' },
+  { id: 'f9', title: 'Beach House', desc: 'Building work', category: 'building', img: '/images/project.webp', order: 9, location: 'Pondicherry', year: '2025' },
 ]
 
 export const fallbackServices: Service[] = [
