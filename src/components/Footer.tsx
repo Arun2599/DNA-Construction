@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
+import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { prefersReducedMotion } from './Reveal'
 import Fmt from './Fmt'
 import { splitList, telHref, useContent, useSettings } from '../lib/content'
@@ -14,8 +15,15 @@ export default function Footer() {
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
     tweenRef.current = gsap.to(track.current, { xPercent: -50, duration: 40, ease: 'none', repeat: -1 })
+    const word = gsap.fromTo(
+      '.foot-word',
+      { yPercent: 60, opacity: 0.2 },
+      { yPercent: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } },
+    )
     return () => {
       tweenRef.current?.kill()
+      word.scrollTrigger?.kill()
+      word.kill()
     }
   }, [])
 
@@ -122,6 +130,16 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* giant wordmark: sized to the viewport so it always spans edge to edge */}
+      <div className="relative overflow-hidden px-3">
+        <p
+          aria-hidden
+          className="foot-word select-none whitespace-nowrap text-center font-display text-[23vw] uppercase leading-[0.8] text-white"
+        >
+          DNA<span className="text-primary">.</span>Build
+        </p>
+      </div>
+
       <div className="relative border-t border-white/5">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-6 py-6 text-sm text-white/40 md:flex-row md:px-10">
           <p>© {new Date().getFullYear()} DNA Constructions &amp; Architects</p>
@@ -132,7 +150,17 @@ export default function Footer() {
             </span>
             Open for new projects
           </p>
-          <p>Crafted &amp; baked with ❤️</p>
+          <button
+            onClick={() => {
+              const sm = ScrollSmoother.get()
+              if (sm) sm.scrollTo(0, true)
+              else window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+            className="group inline-flex items-center gap-2 font-bold uppercase tracking-wide text-white/60 transition-colors hover:text-primary"
+          >
+            Back to top
+            <span className="grid h-8 w-8 place-items-center rounded-full border border-white/15 transition-transform duration-300 group-hover:-translate-y-1">↑</span>
+          </button>
         </div>
       </div>
     </footer>

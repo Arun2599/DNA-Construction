@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
 
 const AdminPage = lazy(() => import('./admin/AdminPage'))
 import Navbar from './components/Navbar'
+import { Cursor, PageTransition, ScrollProgress } from './components/Chrome'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import WhatWeOffer from './pages/WhatWeOffer'
@@ -35,8 +36,13 @@ function ScrollToTop() {
     const smoother = ScrollSmoother.get()
     if (smoother) smoother.scrollTop(0)
     else window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-    // new page = new height; let ScrollTrigger re-measure once it has rendered
-    requestAnimationFrame(() => ScrollTrigger.refresh())
+    // new page = new height; let ScrollTrigger re-measure once it has rendered.
+    // sort first: child components create triggers before the page's pins add their spacing,
+    // and refresh measures in creation order — sorted by position, pins are measured first.
+    requestAnimationFrame(() => {
+      ScrollTrigger.sort()
+      ScrollTrigger.refresh()
+    })
   }, [pathname])
   return null
 }
@@ -56,6 +62,9 @@ export default function App() {
     <>
       <SmoothScroll />
       <ScrollToTop />
+      <PageTransition />
+      <ScrollProgress />
+      <Cursor />
       <Navbar />
       <div id="smooth-wrapper">
         <div id="smooth-content">

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { telHref, useSettings } from '../lib/content'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -12,6 +13,12 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const lastY = useRef(0)
+  const s = useSettings()
+
+  // lock page scroll behind the open menu
+  useEffect(() => {
+    document.documentElement.style.overflow = open ? 'hidden' : ''
+  }, [open])
 
   useEffect(() => {
     const onScroll = () => {
@@ -31,6 +38,46 @@ export default function Navbar() {
     }`
 
   return (
+    <>
+      {/* phones: full-screen poster menu — giant numbered links rise in one after another */}
+      <div
+        className={`fixed inset-0 z-40 flex flex-col justify-between overflow-hidden bg-ink px-6 pb-8 pt-28 text-white transition-[clip-path] duration-700 ease-[cubic-bezier(0.77,0,0.18,1)] md:hidden ${
+          open ? '[clip-path:circle(150%_at_calc(100%-2.5rem)_2.5rem)]' : 'pointer-events-none [clip-path:circle(0%_at_calc(100%-2.5rem)_2.5rem)]'
+        }`}
+      >
+        <div className="grain pointer-events-none absolute inset-0 opacity-[0.3]" />
+        <div className="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full text-primary opacity-25 orb" />
+        <nav className="relative flex flex-col">
+          {[...links, { to: '/contact', label: 'Contact' }].map((l, i) => (
+            <span key={l.to} className="overflow-hidden border-b border-white/10">
+              <NavLink
+                to={l.to}
+                end={l.to === '/'}
+                onClick={() => setOpen(false)}
+                style={{ transitionDelay: open ? `${200 + i * 70}ms` : '0ms' }}
+                className={({ isActive }) =>
+                  `flex items-baseline gap-4 py-3 font-display text-[clamp(2.6rem,13vw,4.5rem)] uppercase leading-none transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    open ? 'translate-y-0' : 'translate-y-full'
+                  } ${isActive ? 'text-primary' : 'text-white'}`
+                }
+              >
+                <span className="font-body text-xs font-bold text-white/30">0{i + 1}</span>
+                {l.label}
+              </NavLink>
+            </span>
+          ))}
+        </nav>
+        <div
+          className={`relative flex flex-col gap-1 text-sm font-semibold text-white/60 transition-opacity duration-500 ${open ? 'opacity-100 delay-500' : 'opacity-0'}`}
+        >
+          <a href={telHref(s.phone1)} className="font-display text-2xl uppercase text-sun">
+            {s.phone1}
+          </a>
+          <a href={`mailto:${s.email1}`} className="break-all">
+            {s.email1}
+          </a>
+        </div>
+      </div>
     <header
       className={`fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4 transition-transform duration-500 ease-out md:pt-5 ${
         hidden && !open ? '-translate-y-28' : 'translate-y-0'
@@ -82,24 +129,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      <div
-        className={`absolute inset-x-4 top-[76px] origin-top flex-col gap-1 rounded-3xl border border-white/10 bg-ink/95 p-4 backdrop-blur-xl transition-all duration-300 md:hidden ${
-          open ? 'flex scale-100 opacity-100' : 'pointer-events-none flex scale-95 opacity-0'
-        }`}
-      >
-        {links.map((l) => (
-          <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkClass} onClick={() => setOpen(false)}>
-            {l.label}
-          </NavLink>
-        ))}
-        <Link
-          to="/contact"
-          onClick={() => setOpen(false)}
-          className="accent-gradient mt-2 rounded-full px-5 py-3 text-center text-sm font-semibold text-ink transition-transform active:scale-95"
-        >
-          Contact us
-        </Link>
-      </div>
     </header>
+    </>
   )
 }

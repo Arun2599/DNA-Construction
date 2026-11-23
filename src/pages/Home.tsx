@@ -6,6 +6,7 @@ import Reveal, { prefersReducedMotion } from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
 import Scene3D, { introScene, playScene, staticScene } from '../components/Scene3D'
 import Fmt, { fmtAccent } from '../components/Fmt'
+import ScrubText from '../components/ScrubText'
 import {
   splitList,
   useContent,
@@ -146,6 +147,102 @@ function TestimonialMarquee({ items }: { items: Testimonial[] }) {
         ))}
       </div>
     </div>
+  )
+}
+
+/* Desktop: the section pins and the projects slide past sideways, each photo drifting inside its frame.
+   Phones keep the stacked grid (see Home). */
+function ProjectRail({ projects, title }: { projects: Project[]; title: string }) {
+  const section = useRef<HTMLElement>(null)
+  const track = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 1024px)', () => {
+      const t = track.current!
+      const dist = () => t.scrollWidth - innerWidth
+      const slide = gsap.to(t, {
+        x: () => -dist(),
+        ease: 'none',
+        scrollTrigger: { trigger: section.current, start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: 0.8, invalidateOnRefresh: true },
+      })
+      t.querySelectorAll('.rail-img').forEach((img) =>
+        gsap.fromTo(img, { xPercent: -8 }, {
+          xPercent: 8,
+          ease: 'none',
+          scrollTrigger: { trigger: img.parentElement, containerAnimation: slide, start: 'left right', end: 'right left', scrub: true },
+        }),
+      )
+      gsap.fromTo(t.querySelectorAll('.rail-card'), { rotate: 3, y: 40 }, {
+        rotate: 0,
+        y: 0,
+        ease: 'none',
+        stagger: 0.1,
+        scrollTrigger: { trigger: section.current, start: 'top bottom', end: 'top top', scrub: true },
+      })
+    })
+    return () => mm.revert()
+  }, [projects.length])
+
+  return (
+    <section ref={section} className="relative hidden h-svh overflow-hidden bg-mist text-ink lg:block">
+      <div ref={track} className="relative flex h-full w-max items-center gap-10 pl-[max(2.5rem,calc((100vw-1300px)/2+2.5rem))] pr-[10vw] motion-reduce:w-full motion-reduce:overflow-x-auto">
+        <div className="w-[34vw] max-w-[520px] shrink-0">
+          <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
+            <span className="h-px w-10 bg-primary" />
+            Our work
+          </p>
+          <h2 className="font-display text-[clamp(3rem,6vw,6.5rem)] uppercase leading-[0.9] tracking-tight">
+            <Fmt text={title} />
+          </h2>
+          <p className="mt-6 flex items-center gap-3 text-sm font-bold uppercase tracking-wide text-ink/50">
+            Keep scrolling
+            <svg width="40" height="12" viewBox="0 0 40 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M0 6h38m-5-5 5 5-5 5" /></svg>
+          </p>
+        </div>
+
+        {projects.map((p, i) => (
+          <Link
+            key={p.id ?? p.title}
+            to={p.id ? `/projects/${p.id}` : '/projects'}
+            data-cursor="View"
+            className={`rail-card group relative block h-[64vh] shrink-0 overflow-hidden rounded-[2rem] shadow-2xl ${i % 2 ? 'mt-[10vh] w-[38vw]' : '-mt-[6vh] w-[50vw]'}`}
+          >
+            <img src={p.img} alt={p.title} className="rail-img absolute inset-y-0 -left-[10%] h-full w-[120%] max-w-none object-cover transition-[filter] duration-700 group-hover:saturate-150" />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-transparent" />
+            <span className="absolute left-6 top-6 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0">
+              {p.category}
+            </span>
+            <span className="pointer-events-none absolute right-6 top-2 font-display text-[7rem] leading-none text-white/15 transition-colors duration-500 group-hover:text-primary/50">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-8 text-white">
+              <div>
+                <h3 className="font-display text-4xl uppercase leading-none transition-transform duration-500 group-hover:-translate-y-1">{p.title}</h3>
+                <p className="mt-2 text-sm font-bold uppercase tracking-wide text-white/60">
+                  {[p.location, p.year].filter(Boolean).join(' · ') || p.desc}
+                </p>
+              </div>
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white text-ink transition-all duration-500 group-hover:rotate-45 group-hover:bg-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+              </span>
+            </div>
+          </Link>
+        ))}
+
+        <Link
+          to="/projects"
+          className="group grid h-[42vh] w-[26vw] shrink-0 rotate-[2deg] place-items-center rounded-[2rem] bg-ink p-8 text-center text-white shadow-2xl transition-transform duration-500 hover:rotate-0 hover:scale-[1.03]"
+        >
+          <span className="font-display text-[clamp(2.5rem,4vw,4.5rem)] uppercase leading-[0.9]">
+            View all
+            <br />
+            <span className="text-primary">projects ↗</span>
+          </span>
+        </Link>
+      </div>
+    </section>
   )
 }
 
@@ -378,6 +475,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ MANIFESTO — the about copy reads itself as you scroll ============ */}
+      <section className="relative overflow-hidden bg-white py-28 text-ink md:py-40">
+        <span aria-hidden className="pointer-events-none absolute -left-[2vw] top-6 select-none whitespace-nowrap font-display text-[22vw] leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(17,17,17,0.06)]">
+          SINCE 2022
+        </span>
+        <div className="relative mx-auto max-w-[1300px] px-5 md:px-10">
+          <p className="mb-8 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary-dark">
+            <span className="h-px w-10 bg-primary" />
+            Who we are
+          </p>
+          <ScrubText
+            text={c.aboutText}
+            className="max-w-6xl text-[clamp(1.7rem,4.2vw,3.6rem)] font-semibold leading-[1.15] tracking-tight"
+          />
+        </div>
+      </section>
+
       {/* ============ ABOUT ============ */}
       <section className="bg-mist py-24 text-ink md:py-32">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
@@ -390,7 +504,6 @@ export default function Home() {
               <h2 className="font-display text-[clamp(2.6rem,7vw,5rem)] uppercase leading-[0.92] tracking-tight">
                 <Fmt text={c.aboutTitle} />
               </h2>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-2">{c.aboutText}</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 {splitList(c.aboutChips).map((chip) => (
                   <span
@@ -403,7 +516,7 @@ export default function Home() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.15}>
+            <Reveal delay={0.15} clip>
               <div className="group relative h-full min-h-[420px] overflow-hidden rounded-[2rem] shadow-2xl md:min-h-[520px]">
                 <img
                   src="/images/team.jpg"
@@ -499,7 +612,8 @@ export default function Home() {
       </section>
 
       {/* ============ FEATURED PROJECTS ============ */}
-      <section className="bg-mist py-24 text-ink md:py-32">
+      <ProjectRail projects={featuredProjects} title={c.projectsTitle} />
+      <section className="bg-mist py-24 text-ink md:py-32 lg:hidden">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
           <Reveal className="mb-14 flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -529,6 +643,7 @@ export default function Home() {
               <Reveal key={p.id ?? p.title} delay={(i % 2) * 0.1} className={projectSpans[i % projectSpans.length]} stackTop={96 + (i % 4) * 10}>
                 <Link
                   to={p.id ? `/projects/${p.id}` : '/projects'}
+                  data-cursor="View"
                   className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[420px]"
                 >
                   <img

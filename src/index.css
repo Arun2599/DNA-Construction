@@ -18,6 +18,12 @@
     border-radius: 4px;
   }
 
+  /* custom cursor (Chrome.tsx) replaces the native one on fine pointers */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
   /* Hidden scrollbars (kept from the original design) */
   *::-webkit-scrollbar {
     display: none;

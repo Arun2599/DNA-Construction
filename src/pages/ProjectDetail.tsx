@@ -88,6 +88,7 @@ export default function ProjectDetail() {
                   key={src}
                   delay={(i % 2) * 0.08}
                   y={30}
+                  clip
                   className={[7, 5, 5, 7][i % 4] === 7 ? 'lg:col-span-7' : 'lg:col-span-5'}
                 >
                   <div className="group relative h-[280px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]">

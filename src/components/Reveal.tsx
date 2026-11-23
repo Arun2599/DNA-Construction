@@ -12,6 +12,7 @@ export const prefersReducedMotion = () =>
  * With `stagger`, animates direct children one after another instead of the block.
  * With `stackTop`, below lg the element becomes a sticky stacking card: it pins at
  * `stackTop` px and scales back slightly as the next card scrolls over it.
+ * With `clip`, the block unmasks upward (clip-path wipe) while any <img> inside settles from a zoom.
  */
 export default function Reveal({
   children,
@@ -21,6 +22,7 @@ export default function Reveal({
   stagger = 0,
   blur = false,
   stackTop,
+  clip = false,
 }: {
   children: ReactNode
   className?: string
@@ -29,6 +31,7 @@ export default function Reveal({
   stagger?: number
   blur?: boolean
   stackTop?: number
+  clip?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -39,6 +42,17 @@ export default function Reveal({
     if (prefersReducedMotion()) {
       gsap.set(targets, { autoAlpha: 1 })
       return
+    }
+    if (clip) {
+      const tl = gsap
+        .timeline({ delay, scrollTrigger: { trigger: el, start: 'top 90%', once: true } })
+        // clearProps afterwards: a lingering clip-path would cut off hover lift + shadows
+        .fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'expo.out', clearProps: 'clipPath' })
+        .fromTo(el.querySelectorAll('img'), { scale: 1.35 }, { scale: 1, duration: 1.6, ease: 'expo.out', clearProps: 'transform' }, 0)
+      return () => {
+        tl.scrollTrigger?.kill()
+        tl.kill()
+      }
     }
     const tween = gsap.fromTo(
       targets,
@@ -58,7 +72,7 @@ export default function Reveal({
       tween.scrollTrigger?.kill()
       tween.kill()
     }
-  }, [delay, y, stagger, blur])
+  }, [delay, y, stagger, blur, clip])
 
   // deck effect: once stuck, scale back while the next card slides over
   useLayoutEffect(() => {

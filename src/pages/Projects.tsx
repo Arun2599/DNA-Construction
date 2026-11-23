@@ -60,11 +60,13 @@ export default function Projects() {
                 key={p.id ?? p.title}
                 delay={(i % 2) * 0.08}
                 y={30}
+                clip
                 className={[7, 5, 5, 7][i % 4] === 7 ? 'lg:col-span-7' : 'lg:col-span-5'}
                 stackTop={152 + (i % 5) * 10}
               >
                 <Link
                   to={`/projects/${p.id}`}
+                  data-cursor="View"
                   className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[400px]"
                 >
                   <img
