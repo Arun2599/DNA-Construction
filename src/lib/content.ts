@@ -45,6 +45,8 @@ export type Settings = {
   email1: string
   email2: string
   address: string
+  /** Chennai branch office */
+  address2: string
   hoursWeek: string
   hoursSunday: string
   whatsapp: string
@@ -202,6 +204,7 @@ export const fallbackSettings: Settings = {
   email1: 'dnaconstructions@gmail.com',
   email2: 'dhanushguna@gmail.com',
   address: 'No 8, Ambedkar Nagar, Neyveli, Cuddalore - 607804',
+  address2: 'AKSHAYA THE BELVEDERE, C2-104, Apartments, Chennai, Nandivaram-Guduvancheri, Tamil Nadu 603202',
   hoursWeek: '9:00 AM – 6:00 PM',
   hoursSunday: 'Closed',
   whatsapp: 'https://wa.me/917305693530',

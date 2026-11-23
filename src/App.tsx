@@ -6,6 +6,9 @@ import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { prefersReducedMotion } from './components/Reveal'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
+// phones: the address bar showing/hiding resizes the viewport on every scroll direction change;
+// re-measuring every trigger then makes pinned sections jump. svh-sized layouts don't need it.
+ScrollTrigger.config({ ignoreMobileResize: true })
 
 const AdminPage = lazy(() => import('./admin/AdminPage'))
 import Navbar from './components/Navbar'

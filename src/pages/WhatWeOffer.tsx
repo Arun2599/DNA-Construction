@@ -3,17 +3,8 @@ import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 import Magnetic from '../components/Magnetic'
 import Fmt from '../components/Fmt'
+import ServiceList from '../components/ServiceList'
 import { fallbackServices, useContent, useList, type Service } from '../lib/content'
-
-/* Content comes from Firestore (editable at /admin); the style cycle keeps the poster look. */
-const styles = [
-  { bg: 'bg-ink', dark: true, tilt: -2 },
-  { bg: 'bg-primary', dark: false, tilt: 1.5 },
-  { bg: 'bg-sun', dark: false, tilt: -1 },
-  { bg: 'bg-sun', dark: false, tilt: 2 },
-  { bg: 'bg-ink', dark: true, tilt: -1.5 },
-  { bg: 'bg-primary', dark: false, tilt: 1 },
-]
 
 export default function WhatWeOffer() {
   const c = useContent()
@@ -27,36 +18,11 @@ export default function WhatWeOffer() {
         description={c.offerDesc}
       />
 
-      <section className="bg-mist py-24 text-ink md:py-32">
+      <section className="bg-mist pb-24 pt-16 text-ink md:pb-32 md:pt-24">
         <div className="mx-auto max-w-[1300px] px-5 md:px-10">
-          <div className="grid gap-7 lg:grid-cols-3">
-            {services.map((s, i) => {
-              const st = styles[i % styles.length]
-              return (
-              <Reveal key={s.id ?? s.title} delay={(i % 3) * 0.1} stackTop={96 + (i % 6) * 8}>
-                <div
-                  className={`${st.bg} ${st.dark ? 'text-white' : 'text-ink'} flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
-                  style={{ rotate: `${st.tilt}deg` }}
-                >
-                  <span className={`font-display text-lg ${st.dark ? 'text-white/30' : 'text-ink/30'}`}>0{i + 1}</span>
-                  <h3 className="mt-2 font-display text-3xl uppercase leading-none">{s.title}</h3>
-                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${st.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {s.tags.split(',').map((raw) => raw.trim()).filter(Boolean).map((t) => (
-                      <span
-                        key={t}
-                        className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
-                          st.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
-                        }`}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-            )})}
-          </div>
+          <Reveal y={60}>
+            <ServiceList services={services} />
+          </Reveal>
 
           {/* CTA */}
           <Reveal className="relative mt-24 overflow-hidden rounded-[2.5rem] bg-ink py-20 text-center text-white md:py-24">

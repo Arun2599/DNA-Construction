@@ -39,7 +39,9 @@ export default function Reveal({
     const el = ref.current
     if (!el) return
     const targets = stagger > 0 ? Array.from(el.children) : el
-    if (prefersReducedMotion()) {
+    // display:none (e.g. a phone-only block on desktop): a `once` trigger there would fire and kill
+    // itself mid-refresh and crash ScrollTrigger — nothing to animate anyway, so just show it.
+    if (prefersReducedMotion() || !el.getClientRects().length) {
       gsap.set(targets, { autoAlpha: 1 })
       return
     }

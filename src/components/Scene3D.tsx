@@ -391,29 +391,47 @@ export function staticScene(scene: HTMLElement) {
 /**
  * Wires the camera + build timeline. `sxv` frames the house off-centre at rest (desktop: right of
  * the headline). `onStart` lets the caller add its own tweens at the very start (e.g. fade the hero copy).
+ * `finale` overrides the end camera. `inside: false` skips the fly-through and ends on the lit house
+ * instead — portrait screens can't frame the wide, low living room without the slabs looming in.
+ * `entry` scrubs a camera swoop while the stage scrolls into view, before it pins (phones).
  * Returns a cleanup.
  */
 export function playScene(
   scene: HTMLElement,
   scrollTrigger: ScrollTrigger.Vars,
-  { sxv = 0, onStart }: { sxv?: number; onStart?: (tl: gsap.core.Timeline) => void } = {},
+  {
+    sxv = 0,
+    onStart,
+    finale,
+    entry = false,
+    inside = true,
+  }: { sxv?: number; onStart?: (tl: gsap.core.Timeline) => void; finale?: Partial<Cam>; entry?: boolean; inside?: boolean } = {},
 ) {
   const q = gsap.utils.selector(scene)
   const world = q('.p3-world')[0] as HTMLElement
   const cam: Cam = { rx: -22, ry: -35, zoom: 0, s: 0.95, sxv, sy: 40, fx: 0, fy: -140, fz: 0, idle: 1 }
   const sway = { ry: -6 }
   const mouse = { rx: 0, ry: 0 }
+  // entry swoop: p = 1 while the stage is still below the fold, 0 once it pins
+  const enter = { p: entry ? 1 : 0 }
 
   // camera is written once per frame from three sources: scroll (cam), idle sway, pointer
   let visible = true
   const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting))
   io.observe(scene)
   const tick = () => {
-    if (visible) writeCamera(scene, world, cam, mouse.rx, sway.ry * cam.idle + mouse.ry)
+    if (!visible) return
+    if (enter.p) {
+      const e = enter.p
+      writeCamera(scene, world, { ...cam, s: cam.s * (1 - 0.3 * e), sy: cam.sy + 160 * e }, mouse.rx - 38 * e, sway.ry * cam.idle - 50 * e)
+    } else writeCamera(scene, world, cam, mouse.rx, sway.ry * cam.idle + mouse.ry)
   }
   gsap.ticker.add(tick)
   tick()
   const swayTw = gsap.to(sway, { ry: 6, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+  const enterTw = entry
+    ? gsap.to(enter, { p: 0, ease: 'none', scrollTrigger: { trigger: scene, start: 'top bottom', end: 'top top', scrub: true } })
+    : undefined
 
   let onMove: ((e: PointerEvent) => void) | undefined
   if (matchMedia('(pointer: fine)').matches) {
@@ -475,14 +493,15 @@ export function playScene(
     .from(q('.p3-halo'), { opacity: 0, duration: 0.6 }, '<')
     .to(cam, { ry: 16, rx: -12, s: 1, duration: 1 }, 's4')
 
-  // 5 · fly through the front wall into the lit living room
+  // 5 · fly through the front wall into the lit living room (or, inside: false, a hero shot of the lit house)
   tl.addLabel('s5')
   tl.to(q('.bs-chips'), { autoAlpha: 0, duration: 0.3 }, 's5')
-    .from(q('.p3-int .face'), { autoAlpha: 0, duration: 0.3 }, 's5')
-    .to(cam, { ry: 0, rx: -6, zoom: 640, fy: -80, fz: 30, sy: 60, idle: 0.2, duration: 1.6, ease: 'power2.inOut' }, 's5')
-    .to(q('.p3-front .face'), { autoAlpha: 0, duration: 0.5 }, 's5+=0.35')
-    .from(q('.p3-finale'), { autoAlpha: 0, y: 50, duration: 0.6 }, 's5+=1.1')
-    .to({}, { duration: 0.5 })
+  if (inside)
+    tl.from(q('.p3-int .face'), { autoAlpha: 0, duration: 0.3 }, 's5')
+      .to(cam, { ry: 0, rx: -6, zoom: 640, fy: -80, fz: 30, sy: 60, idle: 0.2, ...finale, duration: 1.6, ease: 'power2.inOut' }, 's5')
+      .to(q('.p3-front .face'), { autoAlpha: 0, duration: 0.5 }, 's5+=0.35')
+  else tl.to(cam, { ry: 20, rx: -16, s: 1, sy: 120, idle: 0.6, ...finale, duration: 1.6, ease: 'power2.inOut' }, 's5')
+  tl.from(q('.p3-finale'), { autoAlpha: 0, y: 50, duration: 0.6 }, 's5+=1.1').to({}, { duration: 0.5 })
 
   tl.fromTo(q('.bs-bar'), { scaleX: 0 }, { scaleX: 1, ease: 'none', duration: tl.labels.s5 }, 0)
 
@@ -490,6 +509,8 @@ export function playScene(
     gsap.ticker.remove(tick)
     io.disconnect()
     swayTw.kill()
+    enterTw?.scrollTrigger?.kill()
+    enterTw?.kill()
     if (onMove) window.removeEventListener('pointermove', onMove)
     tl.scrollTrigger?.kill()
     tl.revert()

@@ -99,7 +99,16 @@ export default function Footer() {
             >
               {s.email1}
             </a>
-            <p>{s.address}</p>
+            <p>
+              <span className="block text-[11px] font-bold uppercase tracking-[0.25em] text-white/40">Neyveli · Head office</span>
+              {s.address}
+            </p>
+            {s.address2 && (
+              <p>
+                <span className="block text-[11px] font-bold uppercase tracking-[0.25em] text-white/40">Chennai · Branch</span>
+                {s.address2}
+              </p>
+            )}
             <div className="mt-2 flex gap-3">
               <a
                 href={s.instagram}

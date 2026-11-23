@@ -7,6 +7,8 @@ import Magnetic from '../components/Magnetic'
 import Scene3D, { introScene, playScene, staticScene } from '../components/Scene3D'
 import Fmt, { fmtAccent } from '../components/Fmt'
 import ScrubText from '../components/ScrubText'
+import ServiceList from '../components/ServiceList'
+import ProjectCard from '../components/ProjectCard'
 import {
   splitList,
   useContent,
@@ -86,21 +88,7 @@ function StatCard({
   )
 }
 
-/* Content comes from Firestore (editable at /admin); these style cycles keep the poster look. */
-const serviceStyles = [
-  { bg: 'bg-ink', dark: true, tilt: -2 },
-  { bg: 'bg-primary', dark: false, tilt: 1.5 },
-  { bg: 'bg-sun', dark: false, tilt: -1 },
-]
-
-const projectSpans = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7']
-
-const testimonialStyles = [
-  { bg: 'bg-white', tilt: -1 },
-  { bg: 'bg-sun', tilt: 1.5 },
-  { bg: 'bg-white', tilt: -1.5 },
-  { bg: 'bg-primary', tilt: 1 },
-]
+const ACCENTS = ['bg-primary', 'bg-sun', 'bg-[#F4845F]', 'bg-[#6BBF7A]']
 
 function TestimonialMarquee({ items }: { items: Testimonial[] }) {
   const track = useRef<HTMLDivElement>(null)
@@ -119,21 +107,18 @@ function TestimonialMarquee({ items }: { items: Testimonial[] }) {
 
   return (
     <div className="overflow-hidden" onMouseEnter={slow} onMouseLeave={resume}>
-      <div ref={track} className="flex w-max gap-7 py-6 pr-7 will-change-transform">
+      <div ref={track} className="flex w-max gap-8 py-8 pr-8 will-change-transform">
         {[0, 1].map((half) => (
-          <div key={half} className="flex shrink-0 gap-7">
+          <div key={half} className="flex shrink-0 gap-8">
             {items.map((t, i) => (
               <figure
                 key={`${half}-${t.id ?? t.name}`}
-                className={`${testimonialStyles[i % testimonialStyles.length].bg} flex w-[320px] flex-col rounded-3xl p-7 text-ink shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:w-[400px] md:p-8`}
-                style={{ rotate: `${testimonialStyles[i % testimonialStyles.length].tilt}deg` }}
+                className="flex w-[320px] flex-col rounded-[1.75rem] bg-white p-7 text-ink shadow-[inset_0_0_0_2px_#111,6px_6px_0_#111] transition-[transform,box-shadow] duration-300 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[inset_0_0_0_2px_#111,10px_10px_0_#111] md:w-[420px] md:p-8"
               >
-                <span className="font-display text-5xl leading-none text-ink/20">❝</span>
-                <blockquote className="mt-3 line-clamp-6 break-words font-medium leading-relaxed text-ink/85">
-                  {t.quote}
-                </blockquote>
-                <figcaption className="mt-auto flex items-center gap-3 pt-6">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink font-display text-white">
+                <span className={`grid h-12 w-12 place-items-center rounded-full font-display text-3xl leading-none text-ink ${ACCENTS[i % ACCENTS.length]}`}>“</span>
+                <blockquote className="mt-5 line-clamp-6 break-words text-lg font-medium leading-relaxed text-ink/85">{t.quote}</blockquote>
+                <figcaption className="mt-auto flex items-center gap-3 border-t-2 border-ink/10 pt-5">
+                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-ink ${ACCENTS[(i + 1) % ACCENTS.length]}`}>
                     {t.name.split(' ')[1]?.[0] ?? t.name[0]}
                   </span>
                   <div className="min-w-0">
@@ -250,7 +235,7 @@ export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
   const c = useContent()
   const settings = useSettings()
-  const services: Service[] = useList('services', fallbackServices).slice(0, 3)
+  const services: Service[] = useList('services', fallbackServices).slice(0, 4)
   const allProjects: Project[] = useList('projects', fallbackProjects)
   const flagged = allProjects.filter((p) => p.featured)
   const featuredProjects = (flagged.length ? flagged : allProjects).slice(0, 4)
@@ -311,7 +296,11 @@ export default function Home() {
       mm.add('(max-width: 1023px)', () =>
         // phone: the 3D stage sits under the copy and pins itself for the build
         // pinSpacing must be explicit: the hero is a flex column, where ScrollTrigger defaults it off
-        playScene(scene, { trigger: scene, start: 'top top', end: '+=400%', pin: true, pinSpacing: true, scrub: 0.6 }),
+        playScene(
+          scene,
+          { trigger: scene, start: 'top top', end: '+=400%', pin: true, pinSpacing: true, anticipatePin: 1, scrub: 0.6 },
+          { entry: true, inside: false },
+        ),
       )
     }, hero)
 
@@ -534,22 +523,23 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="mt-14 grid gap-7 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 lg:grid-cols-3">
             {[
-                { n: '01', h: c.visionTitle, p: c.visionText, bg: 'bg-ink', dark: true, tilt: -1.5 },
-                { n: '02', h: c.missionTitle, p: c.missionText, bg: 'bg-primary', dark: false, tilt: 1.5 },
-                { n: '03', h: c.goalsTitle, p: c.goalsText, bg: 'bg-sun', dark: false, tilt: -1 },
-              ].map((item, i) => (
-              <Reveal key={item.h} delay={(i % 3) * 0.1} stackTop={96 + i * 10}>
-                <div
-                  className={`${item.bg} ${item.dark ? 'text-white' : 'text-ink'} rounded-3xl p-7 shadow-lg transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] md:p-8`}
-                  style={{ rotate: `${item.tilt}deg` }}
-                >
-                  <div className="flex items-baseline justify-between">
-                    <h3 className="font-display text-2xl uppercase tracking-wide">{item.h}</h3>
-                    <span className={`font-display text-lg ${item.dark ? 'text-white/25' : 'text-ink/25'}`}>{item.n}</span>
-                  </div>
-                  <p className={`mt-3 font-medium leading-relaxed ${item.dark ? 'text-white/70' : 'text-ink/75'}`}>{item.p}</p>
+              { n: '01', h: c.visionTitle, p: c.visionText, bar: 'bg-primary', fill: 'group-hover:text-primary' },
+              { n: '02', h: c.missionTitle, p: c.missionText, bar: 'bg-sun', fill: 'group-hover:text-sun' },
+              { n: '03', h: c.goalsTitle, p: c.goalsText, bar: 'bg-[#F4845F]', fill: 'group-hover:text-[#F4845F]' },
+            ].map((item, i) => (
+              <Reveal key={item.h} delay={i * 0.12} stackTop={96 + i * 10}>
+                <div className="group relative h-full overflow-hidden rounded-[1.75rem] bg-white p-7 shadow-[inset_0_0_0_2px_#111] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 md:p-9">
+                  <span className={`absolute inset-x-0 top-0 h-2 origin-left scale-x-[0.18] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 ${item.bar}`} />
+                  <span
+                    aria-hidden
+                    className={`pointer-events-none absolute -right-2 -top-3 font-display text-[7.5rem] leading-none text-transparent transition-colors duration-500 [-webkit-text-stroke:2px_#111] ${item.fill}`}
+                  >
+                    {item.n}
+                  </span>
+                  <h3 className="relative mt-16 font-display text-4xl uppercase leading-none tracking-tight">{item.h}</h3>
+                  <p className="relative mt-4 font-medium leading-relaxed text-ink/70">{item.p}</p>
                 </div>
               </Reveal>
             ))}
@@ -570,44 +560,9 @@ export default function Home() {
             </h2>
           </Reveal>
 
-          <div className="grid gap-7 lg:grid-cols-3">
-            {services.map((s, i) => {
-              const st = serviceStyles[i % serviceStyles.length]
-              return (
-              <Reveal key={s.id ?? s.title} delay={i * 0.1} stackTop={96 + i * 10}>
-                <div
-                  className={`${st.bg} ${st.dark ? 'text-white' : 'text-ink'} group flex h-full flex-col rounded-3xl p-8 shadow-xl transition-all duration-500 hover:rotate-0 hover:scale-[1.03] hover:shadow-2xl`}
-                  style={{ rotate: `${st.tilt}deg` }}
-                >
-                  <h3 className="font-display text-3xl uppercase leading-none">{s.title}</h3>
-                  <p className={`mt-4 flex-1 font-medium leading-relaxed ${st.dark ? 'text-white/70' : 'text-ink/75'}`}>{s.desc}</p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {s.tags.split(',').map((raw) => raw.trim()).filter(Boolean).map((t) => (
-                      <span
-                        key={t}
-                        className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
-                          st.dark ? 'bg-white/10 text-white/85' : 'bg-ink/10 text-ink/80'
-                        }`}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    to="/what-we-offer"
-                    className={`mt-7 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-wide transition-all duration-300 hover:scale-105 group-hover:gap-3 ${
-                      st.dark ? 'bg-primary text-ink' : 'bg-ink text-white'
-                    }`}
-                  >
-                    Learn more
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                  </Link>
-                </div>
-              </Reveal>
-            )})}
-          </div>
+          <Reveal y={60}>
+            <ServiceList services={services} more />
+          </Reveal>
         </div>
       </section>
 
@@ -638,41 +593,10 @@ export default function Home() {
             </Magnetic>
           </Reveal>
 
-          <div className="grid gap-7 lg:grid-cols-12">
+          <div className="grid gap-y-14">
             {featuredProjects.map((p, i) => (
-              <Reveal key={p.id ?? p.title} delay={(i % 2) * 0.1} className={projectSpans[i % projectSpans.length]} stackTop={96 + (i % 4) * 10}>
-                <Link
-                  to={p.id ? `/projects/${p.id}` : '/projects'}
-                  data-cursor="View"
-                  className="group relative block h-[300px] overflow-hidden rounded-[2rem] shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:h-[420px]"
-                >
-                  <img
-                    src={p.img}
-                    alt={p.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent transition-opacity duration-500 group-hover:from-ink/95" />
-
-                  <span className="absolute left-5 top-5 rotate-[-3deg] rounded-full bg-sun px-4 py-1.5 text-xs font-bold uppercase text-ink shadow-md transition-transform duration-300 group-hover:rotate-0">
-                    {p.category}
-                  </span>
-
-                  <span className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-500 group-hover:rotate-45 group-hover:opacity-100">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                  </span>
-
-                  <span className="pointer-events-none absolute -bottom-2 right-4 font-display text-7xl leading-none text-white/10 transition-colors duration-500 group-hover:text-primary/30 md:text-8xl">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-
-                  <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-7">
-                    <h3 className="font-display text-2xl uppercase leading-none transition-transform duration-500 group-hover:-translate-y-1 md:text-3xl">
-                      {p.title}
-                    </h3>
-                  </div>
-                </Link>
+              <Reveal key={p.id ?? p.title} clip stackTop={96 + (i % 4) * 10}>
+                <ProjectCard p={p} i={i} tall={i % 2 === 0} />
               </Reveal>
             ))}
           </div>
